@@ -155,6 +155,9 @@ if (!current_user_can('manage_options')) {
 </div>
 
 <script language="JavaScript">
+    // Lấy URL n8n webhook từ PHP
+    var n8nWebhookUrl = '<?php echo esc_js(get_option('wp_n8n_webhook_url', '')); ?>';
+    
     jQuery(document).ready(function($) {
         // Cập nhật text khi toggle switch thay đổi
         $('#tdx_gen_image').change(function() {
@@ -190,6 +193,12 @@ if (!current_user_can('manage_options')) {
                 'gen_image': jQuery('#tdx_gen_image').is(':checked')
             };
             
+            // Log request trước khi gửi
+            console.log('=== AI Gen Post - API Request ===');
+            console.log('N8N Webhook URL:', n8nWebhookUrl || 'Chưa được cấu hình');
+            console.log('Post Title:', postTitle);
+            console.log('Post Data:', postData);
+            
             // Gửi AJAX request
             jQuery.post(ajaxurl, {
                 action: '<?php echo TDX_CONST['plugin_prefix_name'].'_trigger_webhook'; ?>',
@@ -197,9 +206,41 @@ if (!current_user_can('manage_options')) {
                 post_data: postData,
                 _ajax_nonce: '<?php echo wp_create_nonce(TDX_CONST['plugin_prefix_name'].'_trigger_webhook'); ?>'
             }, function(response) {
-                jQuery('.tdx-scrape-result').html('<p>Đang tạo bài viết, quá trình này có thể mất từ 1-3 phút...</p>');
-                // Disable submit button
-                jQuery('input[type="submit"]').prop('disabled', true);
+                // Log response vào console
+                console.log('=== AI Gen Post - API Response ===');
+                console.log('Response:', response);
+                
+                // Kiểm tra response có phải lỗi không
+                if (typeof response === 'string' && response.trim().startsWith('Lỗi:')) {
+                    // Hiển thị lỗi
+                    console.error('❌ API Error:', response);
+                    jQuery('.tdx-scrape-result').html('<p style="color: red; font-weight: bold;">' + response + '</p>');
+                    // Không disable button để user có thể thử lại
+                    jQuery('input[type="submit"]').prop('disabled', false);
+                } else {
+                    // Thành công - hiển thị message đang xử lý
+                    console.log('✅ API Request Successful');
+                    jQuery('.tdx-scrape-result').html('<p style="color: green;">Đang tạo bài viết, quá trình này có thể mất từ 1-3 phút...</p>');
+                    // Disable submit button
+                    jQuery('input[type="submit"]').prop('disabled', true);
+                }
+                
+                console.log('=== End API Response ===');
+            }).fail(function(xhr, status, error) {
+                // Xử lý lỗi kết nối
+                console.error('=== AI Gen Post - Network Error ===');
+                console.error('Status:', status);
+                console.error('Error:', error);
+                console.error('Response Text:', xhr.responseText);
+                console.error('=== End Network Error ===');
+                
+                var errorMessage = 'Lỗi kết nối: ' + error;
+                if (xhr.responseText) {
+                    errorMessage = xhr.responseText;
+                }
+                jQuery('.tdx-scrape-result').html('<p style="color: red; font-weight: bold;">' + errorMessage + '</p>');
+                // Không disable button để user có thể thử lại
+                jQuery('input[type="submit"]').prop('disabled', false);
             });
         } else {
             jQuery('.tdx-scrape-result').html('<p class="error">Vui lòng nhập tiêu đề bài viết</p>');
