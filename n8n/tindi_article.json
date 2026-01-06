@@ -1,1390 +1,1663 @@
 {
     "name": "Tindi article",
     "nodes": [
-        {
-            "parameters": {
-                "httpMethod": "POST",
-                "path": "fa5206f1-7a31-4cd3-92c9-90ce888093d4",
-                "authentication": "basicAuth",
-                "options": {
-                    "rawBody": true
-                }
-            },
-            "type": "n8n-nodes-base.webhook",
-            "typeVersion": 2,
-            "position": [
-                -1680,
-                400
-            ],
-            "id": "c9b24c59-73a8-4995-b408-a4c014ee3664",
-            "name": "Webhook",
-            "webhookId": "fa5206f1-7a31-4cd3-92c9-90ce888093d4",
-            "credentials": {
-                "httpBasicAuth": {
-                    "id": "JILOqfjtTg89x1RT",
-                    "name": "Basic Auth"
-                }
-            }
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "fa5206f1-7a31-4cd3-92c9-90ce888093d4",
+          "authentication": "basicAuth",
+          "options": {
+            "rawBody": true
+          }
         },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.freepik.com/v1/ai/text-to-image",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "x-freepik-api-key",
-                            "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 2,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                -300,
-                40
-            ],
-            "id": "cd54cbfa-42f2-430e-8905-17c9bf70ff34",
-            "name": "Tạo ảnh Freepik",
-            "retryOnFail": true
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://tindimedia.vn/wp-json/wp/v2/media",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "content.type",
-                            "value": "image/png"
-                        },
-                        {
-                            "name": "content-disposition",
-                            "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-1.png\""
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "binaryData",
-                "inputDataFieldName": "data",
-                "options": {}
-            },
-            "id": "1740772e-e298-4ae6-9adc-ae0be9c94aa6",
-            "name": "Up ảnh 1",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                60,
-                -40
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "operation": "toBinary",
-                "sourceProperty": "data[0].base64",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.convertToFile",
-            "typeVersion": 1.1,
-            "position": [
-                -120,
-                -40
-            ],
-            "id": "f6149305-b80c-46ce-9626-cf49334eecbd",
-            "name": "Convert to File 1"
-        },
-        {
-            "parameters": {
-                "operation": "toBinary",
-                "sourceProperty": "data[0].base64",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.convertToFile",
-            "typeVersion": 1.1,
-            "position": [
-                -120,
-                280
-            ],
-            "id": "55eb8b66-779c-426d-b06a-9f2825616db8",
-            "name": "Convert to File 2"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://tindimedia.vn/wp-json/wp/v2/media",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "content.type",
-                            "value": "image/png"
-                        },
-                        {
-                            "name": "content-disposition",
-                            "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-2.png\""
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "binaryData",
-                "inputDataFieldName": "data",
-                "options": {}
-            },
-            "id": "90487c63-fd68-4d4f-84df-72aa06b484b4",
-            "name": "Up ảnh 2",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                60,
-                280
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "model": {
-                    "__rl": true,
-                    "value": "gpt-4o",
-                    "mode": "list",
-                    "cachedResultName": "gpt-4o"
-                },
-                "options": {
-                    "maxTokens": 8100
-                }
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-            "typeVersion": 1.2,
-            "position": [
-                -140,
-                900
-            ],
-            "id": "4586c3bb-4c78-4e6c-a339-05ca7533599b",
-            "name": "OpenAI Chat Model",
-            "credentials": {
-                "openAiApi": {
-                    "id": "AEXT8nWL9Q0LDrJG",
-                    "name": "OpenAi account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "jsonSchemaExample": "{\n\t\"title\": \"title\",\n\t\"outline\": \"the outline of the article\",\n    \"focus_keyword\": \"main focus keyword\"\n}"
-            },
-            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-            "typeVersion": 1.2,
-            "position": [
-                -1300,
-                560
-            ],
-            "id": "4e4199fa-573d-47fd-b678-4c5bf0e39e60",
-            "name": "Structured Output Parser"
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Please write for me an article for the topic: {{ $json.output.title }}.\nMain keyword: {{ $json.output.focus_keyword }}.\n**General Requirements**:\n- **Title**: Use the title from the topic.\n- **Content Length**:\n    - The **entire article must exceed 2000 words**.\n    - **Each sub-section must be over 500 words**.\n- **Keyword Usage**:\n  - Maintain a **focus keyword density of 5% to 10%** throughout the article.\n**Structure and Formatting**:\n- **Headings**:\n  - Use **numbered headings** exactly as listed in the outline\n  - Add **3 to 4 image insertion locations** in the content using this placeholder format: \"<image-location>\"\n- **Paragraph Style**:\n  - Write in **short, concise paragraphs (2–4 sentences each)** to maximize SEO effectiveness.\n**Use of Markdown**:\n  - Use **markdown list formatting as much as possible** throughout the article.\n**Tone and Style**:\n  - Use a **detailed, informative, and SEO-friendly** writing style.\nWrite extremely detailed for each section of the outline: {{ $json.output.outline }}",
-                "hasOutputParser": true,
-                "messages": {
-                    "messageValues": [
-                        {
-                            "message": "=- You are a detailed assistant and a SEO Copywriter specializing in providing advertising services."
-                        }
-                    ]
-                }
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.6,
-            "position": [
-                -720,
-                600
-            ],
-            "id": "42c8d9ff-6a20-4029-8658-1a7d8ca12eb7",
-            "name": "Viết bài hoàn chỉnh",
-            "alwaysOutputData": false,
-            "retryOnFail": true
-        },
-        {
-            "parameters": {
-                "jsonSchemaExample": "{\n\t\"title\": \"tiêu đề bài viết\",\n\t\"content\": \"nội dung bài viết\"\n}"
-            },
-            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-            "typeVersion": 1.2,
-            "position": [
-                -460,
-                760
-            ],
-            "id": "ea2c1501-f0a9-428f-bfc3-4638b55b253e",
-            "name": "Structured Output Parser1"
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Create a prompt to generate a realistic image for the article as follows in English, write only the command, do not use line breaks, write in one continuous line. {{ $json.output.outline }}",
-                "messages": {
-                    "messageValues": [
-                        {
-                            "message": "=Notes:\n- Do not include any quotation marks or special characters."
-                        }
-                    ]
-                }
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.6,
-            "position": [
-                -720,
-                220
-            ],
-            "id": "0cd91078-97a7-40d8-beb0-ca4da66eb6cf",
-            "name": "Tạo prompt để gen ảnh"
-        },
-        {
-            "parameters": {
-                "mode": "markdownToHtml",
-                "markdown": "={{ $json.output.content }}",
-                "destinationKey": "content",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.markdown",
-            "typeVersion": 1,
-            "position": [
-                -240,
-                600
-            ],
-            "id": "13f254f7-6c06-4273-a54c-91f177b79f67",
-            "name": "Markdown",
-            "alwaysOutputData": false
-        },
-        {
-            "parameters": {
-                "numberInputs": 4
-            },
-            "type": "n8n-nodes-base.merge",
-            "typeVersion": 3.1,
-            "position": [
-                560,
-                380
-            ],
-            "id": "28de36f0-9d51-4232-931b-1c66fa8546fd",
-            "name": "Merge",
-            "alwaysOutputData": true,
-            "executeOnce": true
-        },
-        {
-            "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "loose",
-                        "version": 2
-                    },
-                    "conditions": [
-                        {
-                            "id": "c1be27e0-9b50-4dce-a278-42154acd6a18",
-                            "leftValue": "={{ $('Webhook').item.json.body.post_settings.gen_image }}",
-                            "rightValue": "",
-                            "operator": {
-                                "type": "boolean",
-                                "operation": "true",
-                                "singleValue": true
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                },
-                "looseTypeValidation": true,
-                "options": {}
-            },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.2,
-            "position": [
-                -900,
-                300
-            ],
-            "id": "117dd70a-b137-4e20-bba8-4a1f35968f9f",
-            "name": "Nếu cần gen ảnh"
-        },
-        {
-            "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "loose",
-                        "version": 2
-                    },
-                    "conditions": [
-                        {
-                            "id": "e7f38703-371f-449f-9112-95818d3707d8",
-                            "leftValue": "={{ $('Webhook').item.json.body.post_settings.gen_image }}",
-                            "rightValue": "",
-                            "operator": {
-                                "type": "boolean",
-                                "operation": "true",
-                                "singleValue": true
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                },
-                "looseTypeValidation": true,
-                "options": {}
-            },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.2,
-            "position": [
-                60,
-                600
-            ],
-            "id": "d7c0be40-e088-4a27-89a8-fce3489133fa",
-            "name": "Nếu gen ảnh"
-        },
-        {
-            "parameters": {
-                "jsCode": "// Hàm chuyển đổi chuỗi thành slug\nfunction toSlug(str) {\n  if (typeof str !== 'string') return '';\n  str = str.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n  str = str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');\n  return str;\n}\n// Xử lý input\nconst items = $input.all();\n\n// Lấy title và tạo base slug cho alt text\n// const title = items[3].json.output.title;\n// const baseAlt = toSlug(title); // \"quang-cao-trong-nha-tai-ha-noi\"\n\n// Tạo danh sách ảnh với alt text từ description.rendered\nconst images = items.slice(0, 3).map((item, index) => {\n  const rendered = item.json.description.rendered;\n  // Regex để lấy thẻ <img>\n  const imgRegex = /<img[^>]+>/i;\n  const imgMatch = rendered.match(imgRegex);\n  if (!imgMatch) return '';\n\n  let imgTag = imgMatch[0];\n  // Thêm hoặc cập nhật alt attribute\n  // const altText = `${baseAlt}-image-${index + 1}`;\n  // if (imgTag.includes('alt=')) {\n  //   imgTag = imgTag.replace(/alt=\"[^\"]*\"/i, `alt=\"${altText}\"`);\n  // } else {\n  //   imgTag = imgTag.replace(/>$/, ` alt=\"${altText}\">`);\n  // }\n\n  // Cập nhật width và height\n  const newWidth = item.json.media_details.sizes.medium_large.width;\n  const newHeight = item.json.media_details.sizes.medium_large.height;\n\n  imgTag = imgTag.replace(/\\s*width=\"[^\"]*\"/i, `width=\"${newWidth}\"`);\n  imgTag = imgTag.replace(/\\s*height=\"[^\"]*\"/i, `height=\"${newHeight}\"`);\n\n  // Thêm hoặc cập nhật title attribute\n  // if (imgTag.includes('title=')) {\n  //   imgTag = imgTag.replace(/title=\"[^\"]*\"/i, `title=\"${title}\"`);\n  // } else {\n  //   imgTag = imgTag.replace(/>$/, ` title=\"${title}\">`);\n  // }\n\n  // Thay thế src attribute bằng medium_large source_url\n  const newSrc = item.json.media_details.sizes.medium_large.source_url;\n  imgTag = imgTag.replace(/src=\"[^\"]*\"/i, `src=\"${newSrc}\"`);\n\n  return rendered.replace(imgRegex, imgTag); // Return full rendered HTML with updated img tag\n});\n\n// Lấy HTML từ content của item[3]\nlet contentHtml = items[3].json.content;\n\n// Thay thế <image-location> lần lượt bằng HTML của ảnh\nlet imageIndex = 0;\ncontentHtml = contentHtml.replace(/<(img|image)-[^>]+>/g, () => {\n  if (imageIndex < images.length && images[imageIndex]) {\n    return images[imageIndex++];\n  }\n  return ''; // Xóa các placeholder còn lại\n});\n\n// Cập nhật content trong items[2].json\nitems[3].json.content = contentHtml;\n\n// Trả về content\nreturn items[3];"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                780,
-                400
-            ],
-            "id": "e4589ac1-339b-44e1-a785-df4ca721d59c",
-            "name": "Code"
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Create meta title, meta description, and permaling in the language of the following article:\n- Title: {{ $json.title.raw }}\n- Content: {{ $json.content.raw }}\n- Excerpt: {{ $json.excerpt.rendered }}\n- Focus keyword: {{ $('Tạo dàn ý + chọn keyword').item.json.output.focus_keyword }}",
-                "hasOutputParser": true,
-                "messages": {
-                    "messageValues": [
-                        {
-                            "message": "=You are an expert SEO content optimizer specialized in creating meta tags for marketing and advertising articles. Your task is to analyze the provided content and generate optimized meta tags based on the content.\n\nMETA TAG REQUIREMENTS:\n\n1. Meta Title:\n  - Focus keyword that appears exactly as written in the SEO title — word-for-word, in the same order, without omitting, reordering, or adding any words.\n  - The focus keyword can be a shorter phrase taken directly from the SEO title, but it must match the original text exactly\n  - Better using number in SEO title if possible\n  - Include focus keyword near the beginning\n  - Title length ≤ 60 characters (madatory)\n  - State the main value proposition\n  - Include brand name when relevant\n  - Use action-oriented language for commercial pages\n\n2. Meta Description:\n  - Focus Keyword must be used inside SEO Meta Description (exact match).\n  - Description length ≤ 200 characters (mandatory)\n  - Add clear call-to-action\n  - Highlight key benefits or features\n  - Tease the main insights or findings\n  - Mention key topics covered\n  - Use engaging statement\n  - Include expertise indicators\n  - Promise value or solution\n\n4. Permalink:\n  - Focus Keyword must be used in the Permalink (exact match).\n  - Derive from the focus keyword or main topic\n  - Use lowercase letters, numbers, and hyphens only\n  - Permalink length ≤ 75 characters and >= 55 characters (mandatory)\n  - Keep it concise and descriptive\n  - Remove stop words (e.g., \"the\", \"and\", \"of\")\n  - Ensure it reflects the content’s core subject\n  - Avoid special characters or spaces\n  - Make it memorable and user-friendly\n  - Exclude dates or unnecessary parameters\n\nOUTPUT FORMAT:\nPlease provide meta tags in the required format\n\nVALIDATION CHECKLIST:\n- Matches identified search intent\n- Appropriate for content type\n- Clear value proposition\n- Compelling call-to-action\n- Natural keyword placement\n- Proper grammar and spelling\n- Mobile display optimized\n- Don't use placeholder\n\nTECHNICAL GUIDELINES:\n- No double quotes in meta description\n- Avoid unnecessary special characters\n- Use UTF-8 encoding\n- Capitalize properly\n- Avoid keyword cannibalization\n- Respect brand guidelines\n- Consider local market variations\n- Update meta tags for seasonal content\n- Monitor CTR performance\n- A/B test when possible"
-                        }
-                    ]
-                }
-            },
-            "id": "6367bc0a-7bfc-4d49-99b9-77e932a9ba4a",
-            "name": "Agent SEO Expert",
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "position": [
-                1180,
-                400
-            ],
-            "typeVersion": 1.5,
-            "retryOnFail": false
-        },
-        {
-            "parameters": {
-                "jsonSchemaExample": "{\n  \"meta_title\": \"<meta title here>\",\n  \"meta_description\": \"<meta description here>\",\n  \"permalink\": \"optimized-permalink\"\n}"
-            },
-            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-            "typeVersion": 1.2,
-            "position": [
-                1360,
-                560
-            ],
-            "id": "10fc6dc3-9a34-433f-862d-8dac3501510b",
-            "name": "Structured Output Parser2"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/rankmath/v1/updateMetaBulk",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "contentType": "multipart-form-data",
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "=rows[{{$('Đăng bài').item.json.id}}][focus_keyword]",
-                            "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.focus_keyword }}"
-                        },
-                        {
-                            "name": "=rows[{{$('Đăng bài').item.json.id}}][permalink]",
-                            "value": "={{ $json.output.permalink }}"
-                        },
-                        {
-                            "name": "=rows[{{$('Đăng bài').item.json.id}}][title]",
-                            "value": "={{ $json.output.meta_title }}"
-                        },
-                        {
-                            "name": "=rows[{{$('Đăng bài').item.json.id}}][description]",
-                            "value": "={{ $json.output.meta_description }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "c156c5dc-ba9a-4f2e-b14e-7c135e0d1a4b",
-            "name": "Set thẻ SEO",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                1500,
-                400
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Please generate a **detailed, SEO-optimized outline** in Vietnamese for the proposed title:\n\"{{ $json.body.post_title }}\"\n\nYour task includes two main parts:\n\n1. **Extract Focus Keyword**:\n- Extract **one SEO-friendly focus keyword** from the provided title: {{ $json.body.post_title }}\n  - It **must be a shorter subphrase** taken **verbatim** from the title.\n  - The keyword must **appear exactly in the same word order** as in the title — no changes allowed.\n  - Only return **one valid focus keyword**.\n- Examples:\n  - Title: \"Quảng cáo billboard và pano ngoài trời\"\n  - Valid Focus keyword: \"Quảng cáo billboard và pano\"\n  - Invalid: \"Quảng cáo ngoài trời\", \"pano billboard\", etc.\n\n2. **Generate Outline**:\nCreate a full outline for a long-form SEO article in Vietnamese using the extracted focus keyword.\n- Begin with a short introductory paragraph that:\n  - Highlights the reader's problem or pain point.\n  - Promises value or solutions in the article.\n- Then, create **5–7 main sections** as **H2 headings**:\n  - Use markdown (##) or <h2> tags.\n  - Use **numbering**: 1., 2., etc.\n  - At least **one subheading must contain the exact focus keyword**.\n- Within each H2 section, you may include **optional sub-sections** using:\n  - H3 tags (###) or <h3>\n  - Numbering style: 1.1, 1.2, etc.\n- In each section and sub-section:\n  - Include **1–2 summary sentences** explaining what the section is about.\n- Finish with a **short conclusion**.\n\nPlease return the result in **Vietnamese**, using clear formatting with proper heading tags.",
-                "hasOutputParser": true
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.6,
-            "position": [
-                -1480,
-                400
-            ],
-            "id": "5e8bf4d0-c7f4-482d-a3e7-83a482cdeb5a",
-            "name": "Tạo dàn ý + chọn keyword",
-            "notesInFlow": false,
-            "alwaysOutputData": false,
-            "retryOnFail": true
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.freepik.com/v1/ai/text-to-image",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "x-freepik-api-key",
-                            "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 1,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                -300,
-                280
-            ],
-            "id": "eda57b16-d6c5-4fa8-a210-9fdc3f8522c2",
-            "name": "Tạo ảnh Freepik1",
-            "retryOnFail": true
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.freepik.com/v1/ai/text-to-image",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "x-freepik-api-key",
-                            "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 1,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                60,
-                -180
-            ],
-            "id": "97ce0bc3-bb18-4d3f-ad64-e6662fafe48e",
-            "name": "Tạo ảnh Freepik2",
-            "retryOnFail": true
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/{{ $('Webhook').item.json.body.post_settings.post_type === \"post\" ? \"posts\" : $('Webhook').item.json.body.post_settings.post_type }}/{{ $input.all()[1].json.id }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {}
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "featured_media",
-                            "value": "={{ $input.all()[0].json.id }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "18791b82-d59e-4051-9087-534c157cf456",
-            "name": "Set ảnh bìa",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                1500,
-                60
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "operation": "toBinary",
-                "sourceProperty": "data[0].base64",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.convertToFile",
-            "typeVersion": 1.1,
-            "position": [
-                240,
-                -180
-            ],
-            "id": "ba4ae279-9f2a-4d14-9587-28e14d888b56",
-            "name": "Convert to File "
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://tindimedia.vn/wp-json/wp/v2/media",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "content.type",
-                            "value": "image/png"
-                        },
-                        {
-                            "name": "content-disposition",
-                            "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-0.png\""
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "binaryData",
-                "inputDataFieldName": "data",
-                "options": {}
-            },
-            "id": "d085f4bd-77e0-4826-8fa5-bdc59a138448",
-            "name": "Up ảnh ",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                480,
-                -180
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "loose",
-                        "version": 2
-                    },
-                    "conditions": [
-                        {
-                            "id": "c253a615-c48b-41a3-9684-c07fd3259db2",
-                            "leftValue": "={{ $('Webhook').item.json.body.post_settings.gen_image }}",
-                            "rightValue": "",
-                            "operator": {
-                                "type": "boolean",
-                                "operation": "true",
-                                "singleValue": true
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                },
-                "looseTypeValidation": true,
-                "options": {}
-            },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.2,
-            "position": [
-                980,
-                220
-            ],
-            "id": "30e31bf8-0b21-458b-ac1e-43d3cf4bef15",
-            "name": "Nếu gen ảnh1"
-        },
-        {
-            "parameters": {},
-            "type": "n8n-nodes-base.merge",
-            "typeVersion": 3.1,
-            "position": [
-                1180,
-                60
-            ],
-            "id": "bb4e1a05-e193-4b38-909c-b4ba920c1fea",
-            "name": "Merge1"
-        },
-        {
-            "parameters": {
-                "operation": "toBinary",
-                "sourceProperty": "data[1].base64",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.convertToFile",
-            "typeVersion": 1.1,
-            "position": [
-                -120,
-                120
-            ],
-            "id": "84f267f6-6b48-4041-a2d9-10f14fc927a6",
-            "name": "Convert to File 3"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://tindimedia.vn/wp-json/wp/v2/media",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "content.type",
-                            "value": "image/png"
-                        },
-                        {
-                            "name": "content-disposition",
-                            "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-3.png\""
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "binaryData",
-                "inputDataFieldName": "data",
-                "options": {}
-            },
-            "id": "332b5f8e-c45d-45db-b982-fbcfbc5beb96",
-            "name": "Up ảnh 3",
-            "type": "n8n-nodes-base.httpRequest",
-            "position": [
-                60,
-                120
-            ],
-            "typeVersion": 4.2,
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "alt_text",
-                            "value": "={{ $json.title.raw }}"
-                        },
-                        {
-                            "name": "title",
-                            "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                240,
-                -40
-            ],
-            "id": "166dbdb2-8098-4c5e-ac66-1f03af149feb",
-            "name": "Update ảnh1",
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "alt_text",
-                            "value": "={{ $json.title.raw }}"
-                        },
-                        {
-                            "name": "title",
-                            "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                240,
-                120
-            ],
-            "id": "fd27f732-4a63-4f3d-883c-0baf5fc14abf",
-            "name": "Update ảnh3",
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "alt_text",
-                            "value": "={{ $json.title.raw }}"
-                        },
-                        {
-                            "name": "title",
-                            "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                240,
-                280
-            ],
-            "id": "b39e7a30-0283-4274-a605-ec5bcde0a17f",
-            "name": "Update ảnh2",
-            "retryOnFail": true,
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "alt_text",
-                            "value": "={{ $json.title.raw }}"
-                        },
-                        {
-                            "name": "title",
-                            "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                -180
-            ],
-            "id": "de281f5d-39f2-4e65-a581-12989d2801cf",
-            "name": "Update ảnh",
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "=https://tindimedia.vn/wp-json/wp/v2/{{ $('Webhook').item.json.body.post_settings.post_type === \"post\" ? \"posts\" : $('Webhook').item.json.body.post_settings.post_type }}",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "title",
-                            "value": "={{ $json.output.title }}"
-                        },
-                        {
-                            "name": "content",
-                            "value": "={{ $json.content }}"
-                        },
-                        {
-                            "name": "author",
-                            "value": "={{ $('Webhook').item.json.body.post_settings.author }}"
-                        },
-                        {
-                            "name": "status",
-                            "value": "={{ $('Webhook').item.json.body.post_settings.status }}"
-                        },
-                        {
-                            "name": "categories",
-                            "value": "={{ $('Webhook').item.json.body.post_settings.categories }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                980,
-                400
-            ],
-            "id": "f4b7d0f2-a4de-427d-9615-ba1261314f29",
-            "name": "Đăng bài",
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://tindimedia.vn/wp-json/n8n-webhook/v1/callback",
-                "authentication": "predefinedCredentialType",
-                "nodeCredentialType": "wordpressApi",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "value": "=Execution successfully!"
-                        },
-                        {
-                            "name": "status",
-                            "value": "success"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1660,
-                400
-            ],
-            "id": "64defe99-edd7-4828-bef7-dd26a49b2233",
-            "name": "HTTP Request",
-            "credentials": {
-                "wordpressApi": {
-                    "id": "xjnd3BzvqYUel6cH",
-                    "name": "Wordpress account"
-                }
-            }
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -1680,
+          592
+        ],
+        "id": "c9b24c59-73a8-4995-b408-a4c014ee3664",
+        "name": "Webhook",
+        "webhookId": "fa5206f1-7a31-4cd3-92c9-90ce888093d4",
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "JILOqfjtTg89x1RT",
+            "name": "Basic Auth"
+          }
         }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.freepik.com/v1/ai/text-to-image",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-freepik-api-key",
+                "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 2,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -304,
+          16
+        ],
+        "id": "cd54cbfa-42f2-430e-8905-17c9bf70ff34",
+        "name": "Tạo ảnh Freepik",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://tindimedia.vn/wp-json/wp/v2/media",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "content.type",
+                "value": "image/png"
+              },
+              {
+                "name": "content-disposition",
+                "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-1.png\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {}
+        },
+        "id": "1740772e-e298-4ae6-9adc-ae0be9c94aa6",
+        "name": "Up ảnh 1",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          144,
+          -32
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "data[0].base64",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          -80,
+          -32
+        ],
+        "id": "f6149305-b80c-46ce-9626-cf49334eecbd",
+        "name": "Convert to File 1"
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "data[0].base64",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          -80,
+          352
+        ],
+        "id": "55eb8b66-779c-426d-b06a-9f2825616db8",
+        "name": "Convert to File 2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://tindimedia.vn/wp-json/wp/v2/media",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "content.type",
+                "value": "image/png"
+              },
+              {
+                "name": "content-disposition",
+                "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-2.png\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {}
+        },
+        "id": "90487c63-fd68-4d4f-84df-72aa06b484b4",
+        "name": "Up ảnh 2",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          144,
+          352
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-4o",
+            "mode": "list",
+            "cachedResultName": "gpt-4o"
+          },
+          "options": {
+            "maxTokens": 3600
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          1040,
+          1120
+        ],
+        "id": "4586c3bb-4c78-4e6c-a339-05ca7533599b",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "AEXT8nWL9Q0LDrJG",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Create a prompt to generate a realistic image for the article as follows in English, write only the command, do not use line breaks, write in one continuous line. {{ $json.output.outline }}",
+          "messages": {
+            "messageValues": [
+              {
+                "message": "=Notes:\n- Do not include any quotation marks or special characters."
+              }
+            ]
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.6,
+        "position": [
+          -656,
+          0
+        ],
+        "id": "0cd91078-97a7-40d8-beb0-ca4da66eb6cf",
+        "name": "Tạo prompt để gen ảnh"
+      },
+      {
+        "parameters": {
+          "mode": "markdownToHtml",
+          "markdown": "={{ $json.output.content }}",
+          "destinationKey": "content",
+          "options": {
+            "noHeaderId": true
+          }
+        },
+        "type": "n8n-nodes-base.markdown",
+        "typeVersion": 1,
+        "position": [
+          144,
+          560
+        ],
+        "id": "13f254f7-6c06-4273-a54c-91f177b79f67",
+        "name": "Markdown",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "numberInputs": 4
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.1,
+        "position": [
+          720,
+          128
+        ],
+        "id": "28de36f0-9d51-4232-931b-1c66fa8546fd",
+        "name": "Merge",
+        "alwaysOutputData": true,
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "c1be27e0-9b50-4dce-a278-42154acd6a18",
+                "leftValue": "={{ $('Webhook').item.json.body.post_settings.gen_image }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -880,
+          112
+        ],
+        "id": "117dd70a-b137-4e20-bba8-4a1f35968f9f",
+        "name": "Nếu cần gen ảnh"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "e7f38703-371f-449f-9112-95818d3707d8",
+                "leftValue": "={{ $items('Webhook')[0].json.body.post_settings.gen_image }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          432,
+          560
+        ],
+        "id": "d7c0be40-e088-4a27-89a8-fce3489133fa",
+        "name": "Nếu gen ảnh"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Hàm chuyển đổi chuỗi thành slug\nfunction toSlug(str) {\n  if (typeof str !== 'string') return '';\n  str = str.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n  str = str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');\n  return str;\n}\n// Xử lý input\nconst items = $input.all();\n\n// Lấy title và tạo base slug cho alt text\n// const title = items[3].json.output.title;\n// const baseAlt = toSlug(title); // \"quang-cao-trong-nha-tai-ha-noi\"\n\n// Tạo danh sách ảnh với alt text từ description.rendered\nconst images = items.slice(0, 3).map((item, index) => {\n  const rendered = item.json.description.rendered;\n  // Regex để lấy thẻ <img>\n  const imgRegex = /<img[^>]+>/i;\n  const imgMatch = rendered.match(imgRegex);\n  if (!imgMatch) return '';\n\n  let imgTag = imgMatch[0];\n  // Thêm hoặc cập nhật alt attribute\n  // const altText = `${baseAlt}-image-${index + 1}`;\n  // if (imgTag.includes('alt=')) {\n  //   imgTag = imgTag.replace(/alt=\"[^\"]*\"/i, `alt=\"${altText}\"`);\n  // } else {\n  //   imgTag = imgTag.replace(/>$/, ` alt=\"${altText}\">`);\n  // }\n\n  // Cập nhật width và height\n  const newWidth = item.json.media_details.sizes.medium_large.width;\n  const newHeight = item.json.media_details.sizes.medium_large.height;\n\n  imgTag = imgTag.replace(/\\s*width=\"[^\"]*\"/i, `width=\"${newWidth}\"`);\n  imgTag = imgTag.replace(/\\s*height=\"[^\"]*\"/i, `height=\"${newHeight}\"`);\n\n  // Thêm hoặc cập nhật title attribute\n  // if (imgTag.includes('title=')) {\n  //   imgTag = imgTag.replace(/title=\"[^\"]*\"/i, `title=\"${title}\"`);\n  // } else {\n  //   imgTag = imgTag.replace(/>$/, ` title=\"${title}\">`);\n  // }\n\n  // Thay thế src attribute bằng medium_large source_url\n  const newSrc = item.json.media_details.sizes.medium_large.source_url;\n  imgTag = imgTag.replace(/src=\"[^\"]*\"/i, `src=\"${newSrc}\"`);\n\n  return rendered.replace(imgRegex, imgTag); // Return full rendered HTML with updated img tag\n});\n\n// Lấy HTML từ content của item[3]\nlet contentHtml = items[3].json.content;\n\n// Thay thế <image-location> lần lượt bằng HTML của ảnh\nlet imageIndex = 0;\ncontentHtml = contentHtml.replace(/<(img|image)-[^>]+>/g, () => {\n  if (imageIndex < images.length && images[imageIndex]) {\n    return images[imageIndex++];\n  }\n  return ''; // Xóa các placeholder còn lại\n});\n\n// Cập nhật content trong items[2].json\nitems[3].json.content = contentHtml;\n\n// Trả về content\nreturn items[3];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          944,
+          160
+        ],
+        "id": "e4589ac1-339b-44e1-a785-df4ca721d59c",
+        "name": "Code"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Tạo meta title, meta description, permalink và 3-4 từ khóa phụ (mở rộng từ từ khóa chính) cho bài viết sau:\n- Tiêu đề: {{ $json.title.raw }}\n- Nội dung: {{ $json.content.raw }}\n- Đoạn trích: {{ $json.excerpt.rendered }}\n- Từ khóa chính: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }}\n\nYÊU CẦU META TAG:\n\n1. Meta Title:\n- Chứa từ khóa chính chính xác (nguyên văn, đúng thứ tự).\n- Đặt từ khóa gần đầu tiêu đề.\n- Nên dùng con số nếu phù hợp.\n- Độ dài ≤ 70 ký tự.\n- Nêu rõ giá trị chính, có thể thêm tên thương hiệu.\n\n2. Meta Description:\n- Chứa từ khóa chính (khớp 100%).\n- Độ dài ≤ 200 ký tự.\n- Có CTA rõ ràng.\n- Nêu lợi ích nổi bật, tóm tắt nội dung chính.\n- Văn phong lôi cuốn, thể hiện chuyên môn, hứa hẹn giá trị giải pháp.\n\n3. Permalink:\n- Chứa từ khóa chính (chính xác).\n- Chỉ dùng chữ thường, số, dấu gạch ngang.\n- Độ dài 55–75 ký tự.\n- Ngắn gọn, mô tả đúng nội dung; bỏ từ thừa; không ký tự đặc biệt; dễ nhớ.\n\nCHECKLIST KIỂM TRA:\n\n- Đúng mục đích tìm kiếm.\n- Phù hợp loại nội dung.\n- Giá trị rõ ràng, CTA hấp dẫn.\n- Chính tả chuẩn, tối ưu mobile.\n- Không dùng placeholder.\n\nHƯỚNG DẪN KỸ THUẬT:\n- Không dùng dấu ngoặc kép trong mô tả.\n- Tránh ký tự đặc biệt.\n- Dùng UTF-8, viết hoa đúng chuẩn.",
+          "hasOutputParser": true,
+          "messages": {
+            "messageValues": [
+              {
+                "message": "=You are an expert SEO content optimizer specialized in creating meta tags for marketing and advertising articles."
+              }
+            ]
+          }
+        },
+        "id": "6367bc0a-7bfc-4d49-99b9-77e932a9ba4a",
+        "name": "Agent SEO Expert",
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "position": [
+          1392,
+          656
+        ],
+        "typeVersion": 1.5,
+        "retryOnFail": false
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"meta_title\": \"<tiêu đề meta>\",\n  \"meta_description\": \"<mô tả meta>\",\n  \"permalink\": \"duong-dan-toi-uu\",\n  \"secondary_keywords\": \"các từ khóa phụ\"\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          1472,
+          880
+        ],
+        "id": "10fc6dc3-9a34-433f-862d-8dac3501510b",
+        "name": "Structured Output Parser2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/rankmath/v1/updateMetaBulk",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "contentType": "multipart-form-data",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "=rows[{{$('Đăng bài').item.json.id}}][focus_keyword]",
+                "value": "={{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }},{{ $json.output.secondary_keywords }}"
+              },
+              {
+                "name": "=rows[{{$('Đăng bài').item.json.id}}][permalink]",
+                "value": "={{ $json.output.permalink }}"
+              },
+              {
+                "name": "=rows[{{$('Đăng bài').item.json.id}}][title]",
+                "value": "={{ $json.output.meta_title }}"
+              },
+              {
+                "name": "=rows[{{$('Đăng bài').item.json.id}}][description]",
+                "value": "={{ $json.output.meta_description }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "c156c5dc-ba9a-4f2e-b14e-7c135e0d1a4b",
+        "name": "Set thẻ SEO",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          1744,
+          656
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.freepik.com/v1/ai/text-to-image",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-freepik-api-key",
+                "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 1,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -304,
+          352
+        ],
+        "id": "eda57b16-d6c5-4fa8-a210-9fdc3f8522c2",
+        "name": "Tạo ảnh Freepik1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.freepik.com/v1/ai/text-to-image",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-freepik-api-key",
+                "value": "FPSX50946d27d1ed4dc4bb74b9e8102b0cb0"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n    \"negative_prompt\": \"b&w, person, aerial-view, cartoon, fantasy\",\n    \"guidance_scale\": \"\",\n    \"seed\": \"\",\n    \"num_images\": 1,\n    \"image\": {\n      \"size\": \"widescreen_16_9\"\n    },\n    \"styling\": {\n    \"style\": \"photo\",\n    \"effects\": {\n        \"color\": \"pastel\",\n        \"lightning\": \"warm\",\n        \"framing\": \"portrait\"\n    }\n}\n} ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          720,
+          -176
+        ],
+        "id": "97ce0bc3-bb18-4d3f-ad64-e6662fafe48e",
+        "name": "Tạo ảnh Freepik2",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/{{ $('Webhook').item.json.body.post_settings.post_type === \"post\" ? \"posts\" : $('Webhook').item.json.body.post_settings.post_type }}/{{ $input.all()[1].json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "featured_media",
+                "value": "={{ $input.all()[0].json.id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "18791b82-d59e-4051-9087-534c157cf456",
+        "name": "Set ảnh bìa",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          1968,
+          -176
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "data[0].base64",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          944,
+          -176
+        ],
+        "id": "ba4ae279-9f2a-4d14-9587-28e14d888b56",
+        "name": "Convert to File "
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://tindimedia.vn/wp-json/wp/v2/media",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "content.type",
+                "value": "image/png"
+              },
+              {
+                "name": "content-disposition",
+                "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-0.png\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {}
+        },
+        "id": "d085f4bd-77e0-4826-8fa5-bdc59a138448",
+        "name": "Up ảnh ",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          1168,
+          -176
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "c253a615-c48b-41a3-9684-c07fd3259db2",
+                "leftValue": "={{ $items('Webhook')[0].json.body.post_settings.gen_image }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1456,
+          32
+        ],
+        "id": "30e31bf8-0b21-458b-ac1e-43d3cf4bef15",
+        "name": "Nếu gen ảnh1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.1,
+        "position": [
+          1744,
+          -176
+        ],
+        "id": "bb4e1a05-e193-4b38-909c-b4ba920c1fea",
+        "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "operation": "toBinary",
+          "sourceProperty": "data[1].base64",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          -80,
+          160
+        ],
+        "id": "84f267f6-6b48-4041-a2d9-10f14fc927a6",
+        "name": "Convert to File 3"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://tindimedia.vn/wp-json/wp/v2/media",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "content.type",
+                "value": "image/png"
+              },
+              {
+                "name": "content-disposition",
+                "value": "=attachment;filename=\"{{$('Webhook').item.json.body.post_title.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}}-3.png\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {}
+        },
+        "id": "332b5f8e-c45d-45db-b982-fbcfbc5beb96",
+        "name": "Up ảnh 3",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          144,
+          160
+        ],
+        "typeVersion": 4.2,
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "alt_text",
+                "value": "={{ $json.title.raw }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          -32
+        ],
+        "id": "166dbdb2-8098-4c5e-ac66-1f03af149feb",
+        "name": "Update ảnh1",
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "alt_text",
+                "value": "={{ $json.title.raw }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          160
+        ],
+        "id": "fd27f732-4a63-4f3d-883c-0baf5fc14abf",
+        "name": "Update ảnh3",
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "alt_text",
+                "value": "={{ $json.title.raw }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          432,
+          352
+        ],
+        "id": "b39e7a30-0283-4274-a605-ec5bcde0a17f",
+        "name": "Update ảnh2",
+        "retryOnFail": true,
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/media/{{ $json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "alt_text",
+                "value": "={{ $json.title.raw }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1456,
+          -176
+        ],
+        "id": "de281f5d-39f2-4e65-a581-12989d2801cf",
+        "name": "Update ảnh",
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://tindimedia.vn/wp-json/wp/v2/{{ $items('Webhook')[0].json.body.post_settings.post_type === \"post\" ? \"posts\" : $items('Webhook')[0].json.body.post_settings.post_type }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "title",
+                "value": "={{ $items('Webhook')[0].json.body.post_title }}"
+              },
+              {
+                "name": "content",
+                "value": "={{ $json.content }}"
+              },
+              {
+                "name": "author",
+                "value": "={{ $items('Webhook')[0].json.body.post_settings.author }}"
+              },
+              {
+                "name": "status",
+                "value": "={{ $items('Webhook')[0].json.body.post_settings.status }}"
+              },
+              {
+                "name": "categories",
+                "value": "={{ $items('Webhook')[0].json.body.post_settings.categories }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1168,
+          512
+        ],
+        "id": "f4b7d0f2-a4de-427d-9615-ba1261314f29",
+        "name": "Đăng bài",
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://tindimedia.vn/wp-json/n8n-webhook/v1/callback",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "wordpressApi",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "message",
+                "value": "=Execution successfully!"
+              },
+              {
+                "name": "status",
+                "value": "success"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1968,
+          656
+        ],
+        "id": "64defe99-edd7-4828-bef7-dd26a49b2233",
+        "name": "HTTP Request",
+        "credentials": {
+          "wordpressApi": {
+            "id": "xjnd3BzvqYUel6cH",
+            "name": "Tindi wordpress account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Lấy nội dung outline từ output\nconst outline = $json[\"output\"][\"outline\"];\n\n// Tách từng dòng\nconst lines = outline\n  .split(\"\\n\")\n  .map(line => line.trim())\n  .filter(line => /^#+\\s+/.test(line)); // chỉ giữ dòng có dấu #\n\n/**\n * Biến thành list item có 2 field:\n * - raw: giữ nguyên cả dấu #\n * - section: phần tiêu đề đã bỏ dấu #\n * - level: cấp độ tiêu đề (1=h1, 2=h2, ...)\n */\nconst items = lines.map(line => {\n  const match = line.match(/^(#+)\\s*(.*)$/);\n  const level = match[1].length; // số lượng dấu #\n  const section = match[2];\n  return { json: { raw: line, section, level } };\n});\n\nreturn items;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1104,
+          560
+        ],
+        "id": "cc09a282-558e-48d4-9a31-773aa08b95d2",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Nhận toàn bộ input items (đã có level, section)\nconst items = $input.all().map(i => i.json);\n\n// Mảng kết quả\nconst grouped = [];\n\nlet currentParent = null;\n\nfor (const item of items) {\n  if (item.level === 2) {\n    // Nếu là H2 → tạo 1 nhóm mới\n    currentParent = {\n      title: item.section,\n      raw: item.raw,\n      subsections: []\n    };\n    grouped.push(currentParent);\n  } else if (item.level > 2 && currentParent) {\n    // Nếu là H3, H4 → thêm vào nhóm hiện tại\n    currentParent.subsections.push(item.section);\n  }\n}\n\n// Trả về mỗi nhóm là 1 item n8n\nreturn grouped.map(g => ({ json: g }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -880,
+          560
+        ],
+        "id": "60903f94-22b3-4516-ba1c-2d2bb63f6b51",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nlet merged = \"\";\n\nfor (const item of items) {\n  if (item.json.error) continue;\n\n  const rawTitle = item.json.output.title || \"\";\n  const content = item.json.output.content || \"\";\n\n  // Chuẩn hóa title (bỏ \"5. \" hoặc \"12. \")\n  const normalizedTitle = rawTitle.replace(/^\\d+\\.\\s*/, \"\").trim().toLowerCase();\n\n  // Lấy dòng đầu tiên của content\n  const firstLine = content.split(\"\\n\")[0].toLowerCase().trim();\n\n  // Kiểm tra xem dòng đầu tiên có chứa title hay không\n  const hasTitleInFirstLine = firstLine.includes(normalizedTitle);\n\n  // Kiểm tra content có bắt đầu bằng \"##\"\n  const startsWithMarkdownHeader = content.trim().startsWith(\"##\");\n\n  if (hasTitleInFirstLine || startsWithMarkdownHeader) {\n    merged += `\\n\\n${content}`;\n  } else {\n    merged += `\\n\\n## ${rawTitle}\\n\\n${content}`;\n  }\n}\n\nreturn [\n  {\n    json: {\n      output: {\n        content: merged.trim(),\n      },\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -304,
+          560
+        ],
+        "id": "f20cb775-6ffe-429a-930b-9ab30321f6bc",
+        "name": "Code in JavaScript3"
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"@context\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"@graph\": {\n      \"type\": [\"array\", \"null\"],\n      \"items\": {\n        \"type\": [\"object\", \"null\"],\n        \"properties\": {\n          \"@type\": {\n            \"type\": [\"string\", \"null\"]\n          },\n\n          \"mainEntity\": {\n            \"type\": [\"array\", \"null\"],\n            \"items\": {\n              \"type\": [\"object\", \"null\"],\n              \"properties\": {\n                \"@type\": { \"type\": [\"string\", \"null\"] },\n                \"name\": { \"type\": [\"string\", \"null\"] },\n                \"acceptedAnswer\": {\n                  \"type\": [\"object\", \"null\"],\n                  \"properties\": {\n                    \"@type\": { \"type\": [\"string\", \"null\"] },\n                    \"text\": { \"type\": [\"string\", \"null\"] }\n                  },\n                  \"additionalProperties\": false\n                }\n              },\n              \"additionalProperties\": false\n            }\n          },\n\n          \"name\": {\n            \"type\": [\"string\", \"null\"]\n          },\n          \"description\": {\n            \"type\": [\"string\", \"null\"]\n          },\n\n          \"step\": {\n            \"type\": [\"array\", \"null\"],\n            \"items\": {\n              \"type\": [\"object\", \"null\"],\n              \"properties\": {\n                \"@type\": { \"type\": [\"string\", \"null\"] },\n                \"name\": { \"type\": [\"string\", \"null\"] },\n                \"text\": { \"type\": [\"string\", \"null\"] }\n              },\n              \"additionalProperties\": false\n            }\n          },\n\n          \"supply\": {\n            \"type\": [\"array\", \"null\"],\n            \"items\": {\n              \"type\": [\"object\", \"null\"],\n              \"properties\": {\n                \"@type\": { \"type\": [\"string\", \"null\"] },\n                \"name\": { \"type\": [\"string\", \"null\"] }\n              },\n              \"additionalProperties\": false\n            }\n          },\n\n          \"tool\": {\n            \"type\": [\"array\", \"null\"],\n            \"items\": {\n              \"type\": [\"object\", \"null\"],\n              \"properties\": {\n                \"@type\": { \"type\": [\"string\", \"null\"] },\n                \"name\": { \"type\": [\"string\", \"null\"] }\n              },\n              \"additionalProperties\": false\n            }\n          }\n        },\n\n        \"additionalProperties\": false\n      }\n    }\n  },\n\n  \"additionalProperties\": false\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          448,
+          1088
+        ],
+        "id": "0481c3a9-91bc-4656-920c-13c09fc11d4b",
+        "name": "Structured Output Parser1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Hãy tạo đoạn JSON-LD Schema hoàn chỉnh dựa trên dàn ý bài viết mà tôi cung cấp ở phần input.  \n\nYêu cầu:\n- Schema đúng chuẩn https://schema.org\n- Tạo đầy đủ 3 phần schema:\n  1. FAQPage\n  2. HowTo (quy trình)\n  3. HowToSupply / HowToTool nếu có trong nội dung\n- Nội dung câu hỏi, câu trả lời, quy trình phải dựa theo dàn ý.\n- Tự suy luận câu hỏi từ các tiêu đề.\n- HowTo phải có step, supply, tool khi phù hợp.\n- Chỉ output JSON-LD, không giải thích gì thêm.\n\nQuy tắc bắt buộc:\n- Không thêm mô tả bên ngoài tag <script>.\n- Không escape ký tự.\n- Không thêm markdown.\n- Không giải thích gì thêm ngoài output.\n\nInput đầu vào: {{ $json.output.outline }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "You are an expert in SEO and Schema Markup"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          368,
+          864
+        ],
+        "id": "5d3d0dcb-51ac-4029-9dea-11c9e1722863",
+        "name": "Tạo json schema"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          720,
+          848
+        ],
+        "id": "1504b299-ffbe-4fb8-92d1-ca8ab01ceab7",
+        "name": "Merge2"
+      },
+      {
+        "parameters": {
+          "jsCode": "// // Loop over input items and add a new field called 'myNewField' to the JSON of each one\n// for (const item of $input.all()) {\n//   item.json.myNewField = 1;\n// }\n\n// return $input.all();\n\n// Lấy dữ liệu merge từ input\nconst content = $input.all()[0].json.content;\nconst context = $input.all()[1].json.output[\"@context\"] || \"https://schema.org\";\nconst graph = $input.all()[1].json.output[\"@graph\"] || [];\n\n// Build JSON-LD object\nconst jsonLd = {\n  \"@context\": context,\n  \"@graph\": graph\n};\n\n// Convert JSON-LD → string, format đẹp\nconst jsonLdString = JSON.stringify(jsonLd, null, 2);\n\n// Build HTML final output\nconst finalHtml = `\n${content}\n\n<script type=\"application/ld+json\">\n${jsonLdString}\n</script>\n`.trim();\n\nreturn [{\n  content: finalHtml\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          944,
+          848
+        ],
+        "id": "2e84cedb-0102-42aa-9679-8a5e1defbff5",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Nhiệm vụ:\nViết nội dung chi tiết cho 1 phần của bài viết SEO.\n\nDữ liệu đầu vào:\nTừ khóa chính của chủ đề: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }}\nTiêu đề bài viết: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.title }}\nPhần cần viết: {{ $json.raw }}\nCác tiểu mục (nếu có): {{ $json.subsections || \"Không có\" }}\n\nHướng dẫn viết:\n- Với phần giới thiệu và kết luận hay lời mời hợp tác, chỉ viết 2-3 câu ngắn.\n- Với các phần khác, hãy viết nội dung cực kỳ chi tiết, có chiều sâu, phù hợp với SEO.\n- Mỗi tiểu mục (sub-section) phải dài tối thiểu 200 từ.\n- Duy trì mật độ từ khóa chính từ 5% đến 10% xuyên suốt nội dung.\n- Viết theo đoạn ngắn 2–4 câu, tránh đoạn dài.\n- Dùng định dạng Markdown, đặc biệt là danh sách gạch đầu dòng để trình bày nội dung rõ ràng, dễ đọc.\n- Trong content nên có bảng (table) dưới dạng html (nếu cần thiết cho số liệu).\n- Giữ giọng văn thông tin – chi tiết – thân thiện SEO (tránh lan man hoặc quảng cáo).\n\nYêu cầu đầu ra:\n- Chỉ xuất nội dung thuần văn bản Markdown (riêng phần bảng thì giữ nguyên html).\n- Tiêu đề  và các tiêu đề phụ phải được đánh số (1., 2. với tiêu đề chính và 1.1, 1.2. với các tiêu đề con) như dữ liệu đầu vào.",
+          "hasOutputParser": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          -656,
+          560
+        ],
+        "id": "7a48eded-76f5-476f-a248-e7775e663d88",
+        "name": "AI Agent",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $items('Webhook')[0].json.body.post_title }}_{{ $today }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          -1456,
+          816
+        ],
+        "id": "d61c60e0-6080-43d1-a26f-b693c52f71c9",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"title\": \"1. Giới thiệu\",\n  \"content\": \"Nội dung của phần giới thiệu\"\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -592,
+          784
+        ],
+        "id": "eaa913fd-0fe2-427f-8ed9-b29f14d51503",
+        "name": "Structured Output Parser5"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Nhiệm vụ của bạn bao gồm ba phần chính:\n\n1. Trả về tiêu đề bài viết: \"{{ $json.body.post_title }}\".\n\n2. Trích xuất Từ khóa chính (SEO Focus Keyword)\n- Hãy trích xuất một từ khóa chính thân thiện với SEO từ tiêu đề: {{ $json.body.post_title }}\n- Từ khóa phải là một cụm từ có xuất hiện trong tiêu đề gốc.\n- Chỉ trả về một từ khóa chính hợp lệ duy nhất.\n\n3. Tạo Dàn ý Bài viết\nHãy tạo một dàn ý hoàn chỉnh cho bài viết SEO dài, sử dụng từ khóa chính đã trích xuất.\nYêu cầu cụ thể:\n- Phần mở đầu (h2):\n - Giới thiệu vấn đề hoặc nỗi đau của người đọc.\n - Nêu lợi ích hoặc giải pháp mà bài viết mang lại.\n - Mở đầu bằng thẻ h2 (## hoặc <h2>).\n- Thân bài:\n - Tạo 6-8 mục chính, mỗi mục là một thẻ H2, có số thứ tự (## 1., ## 2. hoặc <h2> 1., <h2>2.).\n - Ít nhất một tiêu đề H2 phải chứa chính xác từ khóa chính.\n - Có thể thêm mục con (H3) nếu cần, theo dạng: ### 1.1., ### 1.2 hoặc <h3> 1.1., <h3> 1.2.\n - Mỗi mục hoặc mục con cần có 1–2 câu tóm tắt giải thích nội dung.\n- Kết luận:\n - Viết ngắn gọn, tóm tắt nội dung chính.\n- Lời mời hợp tác cùng Tindimedia:\n - Viết ngắn gọn, Có thể khuyến khích hành động (CTA) hoặc nêu lợi ích tổng thể.",
+          "hasOutputParser": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          -1456,
+          592
+        ],
+        "id": "76a2b113-7f07-4c00-a43a-48f50323dbeb",
+        "name": "Tạo dàn ý + chọn keyword"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n\t\"title\": \"Tiêu đề bài viết\",\n\t\"outline\": \"Tóm tắt các đầu mục của bài viết\",\n    \"focus_keyword\": \"Từ khóa chính\"\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -1328,
+          816
+        ],
+        "id": "ab83d012-08f3-42a3-84bc-c1ee115e9d29",
+        "name": "Structured Output Parser6"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Dán vào node Function của n8n hoặc chạy trong Node.js\nconst inputContent = $json.output.content || \"\"; // hoặc lấy từ nguồn bạn cần\n\n// Tách thành dòng\nconst lines = inputContent.split(/\\r?\\n/);\n\n// 1) Xóa H2 đầu tiên\nlet removedFirstH2 = false;\nconst afterRemove = [];\nfor (const line of lines) {\n  if (!removedFirstH2 && /^##\\s+/.test(line)) {\n    removedFirstH2 = true;\n    continue; // bỏ qua H2 đầu tiên\n  }\n  afterRemove.push(line);\n}\n\n// hàm tìm index ký tự chữ cái Unicode đầu tiên\nfunction firstLetterIndex(s) {\n  for (let i = 0; i < s.length; i++) {\n    const ch = s[i];\n    // isAlpha approximation: kiểm tra bằng regex Unicode letter\n    if (/\\p{L}/u.test(ch)) return i;\n  }\n  return -1;\n}\n\n// 2) Đánh số lại H2/H3, đồng thời xóa hết số cũ (cho đến chữ cái đầu tiên)\nlet h2Count = 0;\nlet h3Count = 0;\nconst outLines = [];\n\nfor (const line of afterRemove) {\n  const m2 = line.match(/^\\s*##\\s+(.*)$/);\n  const m3 = line.match(/^\\s*###\\s+(.*)$/);\n\n  if (m2) {\n    h2Count += 1;\n    h3Count = 0;\n    let title = m2[1].trim();\n    const idx = firstLetterIndex(title);\n    if (idx > 0) title = title.slice(idx).trim();\n    // Nếu idx == -1 (không tìm thấy chữ) thì giữ nguyên title\n    outLines.push(`## ${h2Count}. ${title}`);\n    continue;\n  }\n\n  if (m3) {\n    h3Count += 1;\n    let title = m3[1].trim();\n    const idx = firstLetterIndex(title);\n    if (idx > 0) title = title.slice(idx).trim();\n    outLines.push(`### ${h2Count}.${h3Count}. ${title}`);\n    continue;\n  }\n\n  outLines.push(line);\n}\n\n// Kết quả\nconst finalContent = outLines.join(\"\\n\");\n\n// Trả về cho n8n\nreturn [\n  {\n    json: {\n      output: {\n        content: finalContent.trim(),\n      },\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -80,
+          560
+        ],
+        "id": "5d2316a2-2349-4716-be29-ca82353e5314",
+        "name": "Code in JavaScript4"
+      }
     ],
-    "pinData": {},
-    "connections": {
-        "Webhook": {
-            "main": [
-                [
-                    {
-                        "node": "Tạo dàn ý + chọn keyword",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Tạo ảnh Freepik": {
-            "main": [
-                [
-                    {
-                        "node": "Convert to File 1",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Convert to File 3",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Up ảnh 1": {
-            "main": [
-                [
-                    {
-                        "node": "Update ảnh1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Convert to File 1": {
-            "main": [
-                [
-                    {
-                        "node": "Up ảnh 1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Convert to File 2": {
-            "main": [
-                [
-                    {
-                        "node": "Up ảnh 2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Up ảnh 2": {
-            "main": [
-                [
-                    {
-                        "node": "Update ảnh2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "OpenAI Chat Model": {
-            "ai_languageModel": [
-                [
-                    {
-                        "node": "Tạo dàn ý + chọn keyword",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    },
-                    {
-                        "node": "Tạo prompt để gen ảnh",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    },
-                    {
-                        "node": "Viết bài hoàn chỉnh",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    },
-                    {
-                        "node": "Agent SEO Expert",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Structured Output Parser": {
-            "ai_outputParser": [
-                [
-                    {
-                        "node": "Tạo dàn ý + chọn keyword",
-                        "type": "ai_outputParser",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Viết bài hoàn chỉnh": {
-            "main": [
-                [
-                    {
-                        "node": "Markdown",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Structured Output Parser1": {
-            "ai_outputParser": [
-                [
-                    {
-                        "node": "Viết bài hoàn chỉnh",
-                        "type": "ai_outputParser",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Tạo prompt để gen ảnh": {
-            "main": [
-                [
-                    {
-                        "node": "Tạo ảnh Freepik",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Tạo ảnh Freepik1",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Tạo ảnh Freepik2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Markdown": {
-            "main": [
-                [
-                    {
-                        "node": "Nếu gen ảnh",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Merge": {
-            "main": [
-                [
-                    {
-                        "node": "Code",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Nếu cần gen ảnh": {
-            "main": [
-                [
-                    {
-                        "node": "Tạo prompt để gen ảnh",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Nếu gen ảnh": {
-            "main": [
-                [
-                    {
-                        "node": "Merge",
-                        "type": "main",
-                        "index": 3
-                    }
-                ],
-                [
-                    {
-                        "node": "Đăng bài",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Code": {
-            "main": [
-                [
-                    {
-                        "node": "Đăng bài",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Structured Output Parser2": {
-            "ai_outputParser": [
-                [
-                    {
-                        "node": "Agent SEO Expert",
-                        "type": "ai_outputParser",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Agent SEO Expert": {
-            "main": [
-                [
-                    {
-                        "node": "Set thẻ SEO",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Tạo dàn ý + chọn keyword": {
-            "main": [
-                [
-                    {
-                        "node": "Nếu cần gen ảnh",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Viết bài hoàn chỉnh",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Tạo ảnh Freepik1": {
-            "main": [
-                [
-                    {
-                        "node": "Convert to File 2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Tạo ảnh Freepik2": {
-            "main": [
-                [
-                    {
-                        "node": "Convert to File ",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Convert to File ": {
-            "main": [
-                [
-                    {
-                        "node": "Up ảnh ",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Up ảnh ": {
-            "main": [
-                [
-                    {
-                        "node": "Update ảnh",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Nếu gen ảnh1": {
-            "main": [
-                [
-                    {
-                        "node": "Merge1",
-                        "type": "main",
-                        "index": 1
-                    }
-                ],
-                []
-            ]
-        },
-        "Merge1": {
-            "main": [
-                [
-                    {
-                        "node": "Set ảnh bìa",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Convert to File 3": {
-            "main": [
-                [
-                    {
-                        "node": "Up ảnh 3",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Up ảnh 3": {
-            "main": [
-                [
-                    {
-                        "node": "Update ảnh3",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Update ảnh1": {
-            "main": [
-                [
-                    {
-                        "node": "Merge",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Update ảnh3": {
-            "main": [
-                [
-                    {
-                        "node": "Merge",
-                        "type": "main",
-                        "index": 1
-                    }
-                ]
-            ]
-        },
-        "Update ảnh2": {
-            "main": [
-                [
-                    {
-                        "node": "Merge",
-                        "type": "main",
-                        "index": 2
-                    }
-                ]
-            ]
-        },
-        "Update ảnh": {
-            "main": [
-                [
-                    {
-                        "node": "Merge1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Đăng bài": {
-            "main": [
-                [
-                    {
-                        "node": "Agent SEO Expert",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Nếu gen ảnh1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Set thẻ SEO": {
-            "main": [
-                [
-                    {
-                        "node": "HTTP Request",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
+    "pinData": {
+      "Webhook": [
+        {
+          "json": {
+            "headers": {
+              "connection": "Upgrade",
+              "host": "workflow.tindimedia.vn",
+              "origin": "https://workflow.tindimedia.vn",
+              "content-length": "255",
+              "user-agent": "WordPress/6.8.1; https://tindimedia.vn",
+              "accept": "*/*",
+              "accept-encoding": "deflate, gzip, zstd",
+              "content-type": "application/json",
+              "authorization": "Basic YWRtaW46dypERSE6VVMlM0xfPXpWakJhNTleUFhr"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "post_title": "So sánh chi phí từng loại hình OOH: billboard, LED, thang máy, phương tiện giao thông",
+              "post_settings": {
+                "categories": [],
+                "author": "1",
+                "status": "draft",
+                "post_type": "post",
+                "gen_image": "false"
+              }
+            },
+            "webhookUrl": "https://workflow.tindimedia.vn:8443/webhook/fa5206f1-7a31-4cd3-92c9-90ce888093d4",
+            "executionMode": "production"
+          },
+          "binary": {
+            "data": {
+              "data": "eyJwb3N0X3RpdGxlIjoiU28gc1x1MDBlMW5oIGNoaSBwaFx1MDBlZCB0XHUxZWVibmcgbG9cdTFlYTFpIGhcdTAwZWNuaCBPT0g6IGJpbGxib2FyZCwgTEVELCB0aGFuZyBtXHUwMGUxeSwgcGhcdTAxYjBcdTAxYTFuZyB0aVx1MWVjN24gZ2lhbyB0aFx1MDBmNG5nIiwicG9zdF9zZXR0aW5ncyI6eyJjYXRlZ29yaWVzIjpbXSwiYXV0aG9yIjoiMSIsInN0YXR1cyI6ImRyYWZ0IiwicG9zdF90eXBlIjoicG9zdCIsImdlbl9pbWFnZSI6ImZhbHNlIn19",
+              "mimeType": "application/json"
+            }
+          }
         }
+      ]
+    },
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Tạo dàn ý + chọn keyword",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo ảnh Freepik": {
+        "main": [
+          [
+            {
+              "node": "Convert to File 1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Convert to File 3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Up ảnh 1": {
+        "main": [
+          [
+            {
+              "node": "Update ảnh1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File 1": {
+        "main": [
+          [
+            {
+              "node": "Up ảnh 1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File 2": {
+        "main": [
+          [
+            {
+              "node": "Up ảnh 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Up ảnh 2": {
+        "main": [
+          [
+            {
+              "node": "Update ảnh2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Agent SEO Expert",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "Tạo prompt để gen ảnh",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "Tạo json schema",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "Tạo dàn ý + chọn keyword",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo prompt để gen ảnh": {
+        "main": [
+          [
+            {
+              "node": "Tạo ảnh Freepik",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Tạo ảnh Freepik1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Tạo ảnh Freepik2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Markdown": {
+        "main": [
+          [
+            {
+              "node": "Nếu gen ảnh",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Nếu cần gen ảnh": {
+        "main": [
+          [
+            {
+              "node": "Tạo prompt để gen ảnh",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Nếu gen ảnh": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 3
+            }
+          ],
+          [
+            {
+              "node": "Merge2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "Đăng bài",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser2": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Agent SEO Expert",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Agent SEO Expert": {
+        "main": [
+          [
+            {
+              "node": "Set thẻ SEO",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo ảnh Freepik1": {
+        "main": [
+          [
+            {
+              "node": "Convert to File 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo ảnh Freepik2": {
+        "main": [
+          [
+            {
+              "node": "Convert to File ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File ": {
+        "main": [
+          [
+            {
+              "node": "Up ảnh ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Up ảnh ": {
+        "main": [
+          [
+            {
+              "node": "Update ảnh",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Nếu gen ảnh1": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ],
+          []
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Set ảnh bìa",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File 3": {
+        "main": [
+          [
+            {
+              "node": "Up ảnh 3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Up ảnh 3": {
+        "main": [
+          [
+            {
+              "node": "Update ảnh3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update ảnh1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update ảnh3": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Update ảnh2": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Update ảnh": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Đăng bài": {
+        "main": [
+          [
+            {
+              "node": "Agent SEO Expert",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Nếu gen ảnh1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set thẻ SEO": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript3": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser1": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Tạo json schema",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo json schema": {
+        "main": [
+          [
+            {
+              "node": "Merge2",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge2": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Đăng bài",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            },
+            {
+              "node": "Tạo dàn ý + chọn keyword",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser5": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tạo dàn ý + chọn keyword": {
+        "main": [
+          [
+            {
+              "node": "Tạo json schema",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Nếu cần gen ảnh",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser6": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Tạo dàn ý + chọn keyword",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript4": {
+        "main": [
+          [
+            {
+              "node": "Markdown",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          []
+        ]
+      }
     },
     "active": true,
     "settings": {
-        "executionOrder": "v1",
-        "callerPolicy": "workflowsFromSameOwner",
-        "errorWorkflow": "jaC81abdrkPRBGkT"
+      "executionOrder": "v1",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "jaC81abdrkPRBGkT"
     },
-    "versionId": "0be3618c-cd82-4302-a81d-afe03f191866",
+    "versionId": "250a80c8-f956-4d42-affb-369f2dab393d",
     "meta": {
-        "templateCredsSetupCompleted": true,
-        "instanceId": "b33bc8670f9f1ab946dd37e51c95e31c4fd585c96960c3141af8dca57d0268ff"
+      "templateCredsSetupCompleted": true,
+      "instanceId": "b33bc8670f9f1ab946dd37e51c95e31c4fd585c96960c3141af8dca57d0268ff"
     },
     "id": "rG5bKILsFomWCuDP",
     "tags": []
-}
+  }
+  
