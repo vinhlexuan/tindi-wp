@@ -1,0 +1,372 @@
+{
+  "name": "Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "httpMethod": [
+          "POST"
+        ],
+        "path": "WucDLGUudLGdbPsoCLPPhcdbykzJuD",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        1184
+      ],
+      "id": "d7ecbd47-7a14-490c-ad14-fc6213bb31b2",
+      "name": "Webhook1",
+      "webhookId": "2ae58f7f-28fd-4728-abd6-8019065e9570"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hãy phản hồi tin nhắn của khách hàng. Đây là dãy tin nhắn mà khách hàng đã gửi: {{ $json.body.messages }}",
+        "options": {
+          "systemMessage": "=Bạn là Đăng, một chuyên gia tư vấn quảng cáo của Tindimedia – đơn vị chuyên cung cấp các dịch vụ quảng cáo ngoài trời, quảng cáo thang máy, quảng cáo VOV giao thông, booking truyền thông và các giải pháp truyền thông tổng thể.\n\nMục tiêu của bạn là giao tiếp thân thiện, chuyên nghiệp, nhiệt tình, tạo cảm giác gần gũi như một người tư vấn thật.\n\nBạn sử dụng thông tin được cung cấp từ Google Sheet sau: Service, FAQ\n\nKhi khách hàng nhắn tin, bạn:\n- Chào hỏi thân mật, tự nhiên, thể hiện sự sẵn sàng hỗ trợ.\n- **Hỏi rõ nhu cầu của khách:**\n  - **Khu vực muốn triển khai, loại hình quảng cáo quan tâm**, nếu có thể thì thời gian dự kiến triển khai.\n- Khi đã có thông tin khu vực triển khai và loại hình quan tâm, bạn sẽ:\n  - Gợi ý khách hàng để lại tên và số điện thoại để tiện cho bộ phận chuyên môn liên hệ tư vấn chi tiết hơn.\n  - **Nếu khách hàng không muốn cung cấp thông tin liên hệ**, bạn tôn trọng và vẫn gửi lại thông tin cho đội ngũ hỗ trợ, kèm lưu ý rằng khách hàng chưa cung cấp số điện thoại.\n- Khi đã có đầy đủ thông tin, bạn:\n  - Xác nhận lại rằng đã nắm rõ nhu cầu\n  - Nói rằng bạn sẽ chuyển thông tin sang bộ phận tư vấn chuyên môn, và đội ngũ sẽ liên hệ lại trong thời gian sớm nhất.\n\nLưu ý:\n- **Hạn chế đưa ra báo giá cụ thể trong cuộc trò chuyện**\n- Nếu khách hàng gửi nội dung không liên quan đến quảng cáo, hãy phản hồi lịch sự và nhẹ nhàng chuyển hướng: \"Dạ em xin phép, hiện tại em đang hỗ trợ thông tin về các dịch vụ quảng cáo của Tindimedia thôi ạ.\"\n- Nếu không chắc chắn một thông tin nào đó: \"Dạ để em kiểm tra lại thông tin này cho chính xác rồi phản hồi anh/chị sau nhé ạ.\"\n- Luôn gợi mở và khuyến khích khách đặt thêm câu hỏi hoặc để lại thông tin liên hệ.\n\nVí dụ chào hỏi:\n\"Chào anh/chị 👋 Em là Đăng, chuyên viên tư vấn tại Tindimedia. Bên em chuyên các dịch vụ quảng cáo ngoài trời, thang máy, LED… Anh/chị đang quan tâm đến hình thức nào để em hỗ trợ thông tin phù hợp nhất nhé ạ 😊\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        -240,
+        1184
+      ],
+      "id": "d06a7228-5528-4182-910c-46452e9755ed",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        1392
+      ],
+      "id": "11abb90f-6099-4852-8c02-8f6d0bec722a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AEXT8nWL9Q0LDrJG",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook1').item.json.body.threadId }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        1392
+      ],
+      "id": "830b7089-5168-4c0c-90a7-69de6e1046db",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1JMAsLuRh-3fswlJVUj6gkP99Zb2WooHzronHMLhJpbs",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 218980327,
+          "mode": "list",
+          "cachedResultName": "FAQ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JMAsLuRh-3fswlJVUj6gkP99Zb2WooHzronHMLhJpbs/edit#gid=218980327"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        48,
+        1392
+      ],
+      "id": "e4e7f002-2974-4c47-b417-869f7ff471f5",
+      "name": "FAQ",
+      "credentials": {
+        "googleApi": {
+          "id": "yCBuXM3srNxHok15",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1JMAsLuRh-3fswlJVUj6gkP99Zb2WooHzronHMLhJpbs",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 950366758,
+          "mode": "list",
+          "cachedResultName": "Service",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JMAsLuRh-3fswlJVUj6gkP99Zb2WooHzronHMLhJpbs/edit#gid=950366758"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -80,
+        1392
+      ],
+      "id": "cedb6687-ba4f-4fe6-879b-b7e21473ddde",
+      "name": "Service",
+      "credentials": {
+        "googleApi": {
+          "id": "yCBuXM3srNxHok15",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "threadId": "={{ $('Webhook1').item.json.body.threadId }}",
+        "message": "={{ $('AI Agent1').item.json.output }}",
+        "quote": {},
+        "mentions": {}
+      },
+      "type": "n8n-nodes-zalo-tools.zaloSendMessage",
+      "typeVersion": 4,
+      "position": [
+        832,
+        1184
+      ],
+      "id": "e22ec4fb-bae3-4b77-b22b-75342a1227e2",
+      "name": "Zalo Send Message",
+      "credentials": {
+        "zaloApi": {
+          "id": "jSz7CDT4SbnwavA5",
+          "name": "Zalo API Credentials"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const redis = require('redis');\n\nconst client = redis.createClient({\n  socket: {\n    host: 'redis', // Replace with your Redis host\n    port: 6379,\n    connectTimeout: 10000\n  },\n  password: '5UkzIbBnNi1SJQu402dh', // Replace with your Redis password\n  database: 0\n});\n\nconst encodeBase64 = (output, threadId) => {\n  try {\n    // Convert inputs to strings, handle null/undefined\n    const outputStr = output != null ? String(output) : '';\n    const threadIdStr = threadId != null ? String(threadId) : '';\n\n    // Combine with a delimiter\n    const combined = `${outputStr}|${threadIdStr}`;\n\n    // Encode to Base64\n    const encoded = Buffer.from(combined, 'utf8').toString('base64');\n\n    return encoded;\n  } catch (err) {\n    console.error('Error encoding Base64:', err.message);\n    throw new Error(`Base64 encoding failed: ${err.message}`);\n  }\n};\n\nfunction removeVietnameseTonesAndEmojis(str) {\n  // Loại bỏ emoji bằng cách lọc ký tự ngoài bảng mã thông thường\n  str = str.replace(/[^\\p{L}\\p{N}\\p{P}\\p{Z}]/gu, '');\n\n  // Loại bỏ dấu tiếng Việt\n  str = str.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n\n  str = str.replace(/[^a-zA-Z0-9 ]/g, '');\n\n  return str;\n}\n\n\nasync function main() {\n  try {\n    // Connect to Redis\n    await client.connect();\n    console.log('Connected to Redis');\n\n    // Get input values from n8n\n    const output = removeVietnameseTonesAndEmojis($('AI Agent1').first().json.output);\n    const threadId = $('Webhook1').first().json.body.threadId;\n\n    const encoded = encodeBase64(output, threadId);\n    // Update Redis key\n    await client.set('last_bot_message_base64', encoded);\n    return [{ json: { success: true, }}]\n  } catch (err) {\n    console.error('Error in main:', err.message);\n    return [{ json: { success: false, error: err.message }}];\n  } finally {\n    // Disconnect\n    await client.quit().catch((err) => console.log('Redis disconnect error:', err.message));\n  }\n}\n\nreturn main();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        1184
+      ],
+      "id": "70371a78-1c31-424f-ac96-9498151a2cbf",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "const redis = require('redis');\n\nconst client = redis.createClient({\n  socket: {\n    host: 'redis', // Replace with your Redis host\n    port: 6379,\n    connectTimeout: 10000\n  },\n  password: '5UkzIbBnNi1SJQu402dh', // Replace with your Redis password\n  database: 0\n});\n\nasync function main() {\n  try {\n    await client.connect();\n    const lastUserTimeStr = await client.get(\"last_user_message_timestamp\")\n    const lastUserTime = parseInt(lastUserTimeStr, 10)\n    const timenow = Date.now()\n\n    if (timenow < lastUserTime + 5 * 60 * 1000) {\n      return [{\n        json: {\n          success: true,\n          stop_workflow: true,\n        }\n      }]\n    } else {\n      return [{\n        json: {\n          success: true,\n          stop_workflow: false,\n        }\n      }]\n    }\n  } catch (err) {\n    console.error('Error in main:', err.message);\n    return [{ json: { success: false, error: err.message }}];\n  } finally {\n    // Disconnect\n    await client.quit().catch((err) => console.log('Redis disconnect error:', err.message));\n  }\n}\n\nreturn main();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        1184
+      ],
+      "id": "c07a3424-b811-4263-adbd-3ecbcc370b60",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "12261b4a-7e7c-4dcf-9e54-a2d55021295d",
+              "leftValue": "={{ $json.stop_workflow }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        1184
+      ],
+      "id": "fdae2d8c-2acc-467b-a773-dde6c0a9641b",
+      "name": "If"
+    }
+  ],
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "connection": "Upgrade",
+            "host": "workflow.tindimedia.vn",
+            "origin": "https://workflow.tindimedia.vn",
+            "content-length": "131",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.2",
+            "accept-encoding": "gzip, compress, deflate, br"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "messages": [
+              "chạy khoảng 3 tháng bắt đầu từ tháng sau"
+            ],
+            "threadId": "8229290284979656789",
+            "messageId": "6707810399195"
+          },
+          "webhookUrl": "https://workflow.tindimedia.vn:8443/webhook/WucDLGUudLGdbPsoCLPPhcdbykzJuD",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Service": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Zalo Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "30f396c9-86fd-44c5-ba1d-805628c3b507",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b33bc8670f9f1ab946dd37e51c95e31c4fd585c96960c3141af8dca57d0268ff"
+  },
+  "id": "yRIX9tBAfYNzBr8w",
+  "tags": []
+}

@@ -1,0 +1,306 @@
+{
+  "name": "Zalo",
+  "nodes": [
+    {
+      "parameters": {
+        "eventTypes": [
+          0
+        ],
+        "selfListen": true
+      },
+      "type": "n8n-nodes-zalo-tools.zaloMessageTrigger",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        -256
+      ],
+      "id": "ac0fc613-f163-4e85-91e5-2adb400cca6a",
+      "name": "Zalo Message Trigger",
+      "webhookId": "50578443-4123-45c6-8efc-762727f76121",
+      "credentials": {
+        "zaloApi": {
+          "id": "jSz7CDT4SbnwavA5",
+          "name": "Zalo API Credentials"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const redis = require('redis');\n\n// Create Redis client\nconst client = redis.createClient({\n    socket: {\n        host: 'redis',\n        port: 6379,\n        connectTimeout: 10000\n    },\n    password: '5UkzIbBnNi1SJQu402dh',\n    database: 0\n});\n\n// Handle Redis errors\nclient.on('error', (err) => console.log('Redis Client Error:', err.message));\n\n// Function to add message to queue\nasync function addMessageToQueue(value) {\n    try {\n        // Connect to Redis\n        await client.connect();\n        console.log('Connected to Redis');\n\n        // Get queue key from input\n        const queueKey = $('Zalo Message Trigger').first().json.message.threadId;\n        const lastUpdatedKey = `last_updated:${queueKey}`;\n        // Add message to queue\n        await client.rPush(queueKey, value);\n\n        const timeNow = Date.now();\n        await client.set(lastUpdatedKey, timeNow);\n        console.log(`Added \"${value}\" to queue with key \"${queueKey}\"`);\n\n        // Return success response\n        return [{ json: { success: true, message: 'Message added to queue', time: timeNow, queueKey: queueKey} }];\n    } catch (err) {\n        console.error('Error:', err.message);\n        return [{ json: { success: false, error: err.message } }];\n    } finally {\n        // Disconnect\n        await client.quit().catch(() => {});\n    }\n}\n\n// Get input message from n8n\nconst inputMessage = $('Zalo Message Trigger').first().json.message.data.content;\n// Execute\nreturn addMessageToQueue(inputMessage);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -256
+      ],
+      "id": "622d4d11-6dfd-49d8-9b6f-b7078f10c66f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "amount": 12
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        -256
+      ],
+      "id": "b36ef4f5-899f-4c28-83e6-3e54248aa87d",
+      "name": "Wait",
+      "webhookId": "4aa804d6-3f07-486a-b6cf-c3cd0f01061c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const redis = require('redis');\nconst axios = require('axios');\n\n// Create Redis client\nconst client = redis.createClient({\n    socket: {\n        host: 'redis', // Replace with your Redis host\n        port: 6379,\n        connectTimeout: 10000\n    },\n    password: '5UkzIbBnNi1SJQu402dh', // Replace with your Redis password\n    database: 0\n});\n\n// Handle Redis errors\nclient.on('error', (err) => console.log('Redis Client Error:', err.message));\n\nasync function checkQueueInactivity() {\n    try {\n        // Connect to Redis\n        await client.connect();\n        console.log('Connected to Redis');\n\n        // Get queue key and last updated key\n        const queueKey = $input.first().json.queueKey;\n        const lastUpdatedKey = `last_updated:${queueKey}`;\n\n        // Get time from previous node (adjust path as needed)\n        const previousNodeTime = $input.first().json.time; \n\n        // Get last updated timestamp from Redis\n        const lastUpdated = await client.get(lastUpdatedKey);\n\n        // Check if queue is inactive\n        const isInactive = lastUpdated == previousNodeTime;\n        const queueLength = await client.lLen(queueKey);\n\n        if (isInactive && queueLength > 0) {\n            // Read all messages from the queue\n            const messages = await client.lRange(queueKey, 0, -1);\n            // Delete the queue\n            await client.del(queueKey);\n            // Trigger the second n8n workflow\n            const webhookUrl = 'https://workflow.tindimedia.vn:8443/webhook/WucDLGUudLGdbPsoCLPPhcdbykzJuD'; // Replace with your n8n webhook URL\n            const payload = {\n                messages: messages,\n                threadId: queueKey.toString(),\n                messageId: $('Zalo Message Trigger').first().json.message.data.msgId\n            };\n            await axios.post(webhookUrl, payload);\n\n            return [{\n                json: {\n                    success: true\n                }\n            }];\n        } else {\n            console.log(`Queue ${queueKey} is active or empty.`);\n            return [{ json: { success: false, message: 'Queue is active or empty' } }];\n        }\n    } catch (err) {\n        console.error('Error checking queue inactivity:', err.message);\n        return [{ json: { success: false, error: err.message } }];\n    } finally {\n        // Disconnect\n        await client.quit().catch(() => {});\n    }\n}\n\n// Execute\nreturn checkQueueInactivity();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        -256
+      ],
+      "id": "ed62d41f-cbd8-4f14-b8b8-2983d4c852f9",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ce65d653-9572-49ce-a8bd-da1277778264",
+              "leftValue": "={{ $json.message.data.msgType }}",
+              "rightValue": "webchat",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ea7110d3-3124-4157-9553-d16ccfa0b64d",
+              "leftValue": "={{ $json.message.type }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        -256
+      ],
+      "id": "8df32455-9ade-448b-8651-a50fbe1761d1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ae6ebc1c-8f14-42de-9559-03c1956a881e",
+              "leftValue": "={{ $json.message.isSelf }}",
+              "rightValue": "True",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        -256
+      ],
+      "id": "e81d10a0-c072-4de8-b6c0-dc50c77ee4d8",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const redis = require('redis');\n\nconst client = redis.createClient({\n  socket: {\n    host: 'redis', // Replace with your Redis host\n    port: 6379,\n    connectTimeout: 10000\n  },\n  password: '5UkzIbBnNi1SJQu402dh', // Replace with your Redis password\n  database: 0\n});\n\nconst decodeBase64 = (encoded) => {\n    try {\n        // Decode Base64 to string\n        const decoded = Buffer.from(encoded, 'base64').toString('utf8');\n\n        // Split by delimiter\n        const [output, threadId] = decoded.split('|');\n\n        return {\n            output: output || '',\n            threadId: threadId || ''\n        };\n    } catch (err) {\n        console.error('Error decoding Base64:', err.message);\n        throw new Error(`Base64 decoding failed: ${err.message}`);\n    }\n};\n\nfunction removeVietnameseTonesAndEmojis(str) {\n  // Loại bỏ emoji bằng cách lọc ký tự ngoài bảng mã thông thường\n  str = str.replace(/[^\\p{L}\\p{N}\\p{P}\\p{Z}]/gu, '');\n\n  // Loại bỏ dấu tiếng Việt\n  str = str.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n\n  str = str.replace(/[^a-zA-Z0-9 ]/g, '');\n\n  return str;\n}\n\nconst content = removeVietnameseTonesAndEmojis($input.first().json.message.data.content);\nconst threadId = $input.first().json.message.threadId;\n\nasync function main() {\n  try {\n    await client.connect();\n    const encoded = await client.get(\"last_bot_message_base64\")\n    const decoded = decodeBase64(encoded);\n  \n    if ((decoded.output == content) && (decoded.threadId == threadId)) {\n      return [{\n        json: {\n          success: true,\n          is_bot_trigger: true,\n          stop_workflow: true\n        }\n      }]\n    } else {\n      await client.set(\"last_user_message_id\", $input.first().json.message.data.msgId.toString())\n      const timestamp = Date.now()\n      await client.set(\"last_user_message_timestamp\", timestamp.toString())\n      return [{\n        json: {\n          success: true,\n          is_bot_trigger: false,\n          stop_workflow: true\n        }\n      }]\n    }\n  } catch (err) {\n    console.error('Error in main:', err.message);\n    return [{ json: { success: false, error: err.message }}];\n  } finally {\n    // Disconnect\n    await client.quit().catch((err) => console.log('Redis disconnect error:', err.message));\n  }\n}\n\nreturn main();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -416
+      ],
+      "id": "d57a7c6f-9030-47da-b862-f3549df27173",
+      "name": "Code2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-zalo-tools.zaloLoginByQr",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2c2dedcb-ed01-4740-b62b-d30e00b204e4",
+      "name": "Zalo Login Via QR Code",
+      "credentials": {
+        "n8nZaloApi": {
+          "id": "JhS4nbwjeGNNz7iY",
+          "name": "n8n Zalo Account Credential account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Zalo Message Trigger": [
+      {
+        "json": {
+          "message": {
+            "type": 0,
+            "data": {
+              "actionId": "10533351026411",
+              "msgId": "6699522229479",
+              "cliMsgId": "1749747066605",
+              "msgType": "webchat",
+              "uidFrom": "2414241807383756512",
+              "idTo": "2007799903806953660",
+              "dName": "Hoàng Quý",
+              "ts": "1749747066624",
+              "status": 1,
+              "content": "Alo",
+              "notify": "1",
+              "ttl": 0,
+              "userId": "0",
+              "uin": "0",
+              "topOut": "0",
+              "topOutTimeOut": "0",
+              "topOutImprTimeOut": "0",
+              "propertyExt": {
+                "color": -1,
+                "size": -1,
+                "type": -1,
+                "subType": 0,
+                "ext": "{\"sSrcType\":-1,\"sSrcStr\":\"\",\"msg_warning_type\":0,\"emoji\":{\"content\":0,\"num\":0,\"uniq\":0,\"first\":\"\",\"last\":\"\",\"most\":\"\",\"text\":1}}"
+              },
+              "paramsExt": {
+                "countUnread": 1,
+                "containType": 0,
+                "platformType": 0
+              },
+              "cmd": 501,
+              "st": 3,
+              "at": 0,
+              "realMsgId": "0"
+            },
+            "threadId": "2414241807383756512",
+            "isSelf": false
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Zalo Message Trigger": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "08acbb52-1c0d-4c2d-afc1-b30e4b3686bd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b33bc8670f9f1ab946dd37e51c95e31c4fd585c96960c3141af8dca57d0268ff"
+  },
+  "id": "iTkZtGrKnibLQiUd",
+  "tags": []
+}
