@@ -51,7 +51,7 @@
           16
         ],
         "id": "cd54cbfa-42f2-430e-8905-17c9bf70ff34",
-        "name": "Tạo ảnh Freepik",
+        "name": "Create Freepik Image",
         "retryOnFail": true
       },
       {
@@ -79,7 +79,7 @@
           "options": {}
         },
         "id": "1740772e-e298-4ae6-9adc-ae0be9c94aa6",
-        "name": "Up ảnh 1",
+        "name": "Upload Image 1",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           144,
@@ -149,7 +149,7 @@
           "options": {}
         },
         "id": "90487c63-fd68-4d4f-84df-72aa06b484b4",
-        "name": "Up ảnh 2",
+        "name": "Upload Image 2",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           144,
@@ -210,7 +210,7 @@
           0
         ],
         "id": "0cd91078-97a7-40d8-beb0-ca4da66eb6cf",
-        "name": "Tạo prompt để gen ảnh"
+        "name": "Create Image Generation Prompt"
       },
       {
         "parameters": {
@@ -279,7 +279,7 @@
           112
         ],
         "id": "117dd70a-b137-4e20-bba8-4a1f35968f9f",
-        "name": "Nếu cần gen ảnh"
+        "name": "If Generate Image Needed"
       },
       {
         "parameters": {
@@ -314,7 +314,7 @@
           560
         ],
         "id": "d7c0be40-e088-4a27-89a8-fce3489133fa",
-        "name": "Nếu gen ảnh"
+        "name": "If Generate Image"
       },
       {
         "parameters": {
@@ -332,7 +332,7 @@
       {
         "parameters": {
           "promptType": "define",
-          "text": "=Tạo meta title, meta description, permalink và 3-4 từ khóa phụ (mở rộng từ từ khóa chính) cho bài viết sau:\n- Tiêu đề: {{ $json.title.raw }}\n- Nội dung: {{ $json.content.raw }}\n- Đoạn trích: {{ $json.excerpt.rendered }}\n- Từ khóa chính: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }}\n\nYÊU CẦU META TAG:\n\n1. Meta Title:\n- Chứa từ khóa chính chính xác (nguyên văn, đúng thứ tự).\n- Đặt từ khóa gần đầu tiêu đề.\n- Nên dùng con số nếu phù hợp.\n- Độ dài ≤ 70 ký tự.\n- Nêu rõ giá trị chính, có thể thêm tên thương hiệu.\n\n2. Meta Description:\n- Chứa từ khóa chính (khớp 100%).\n- Độ dài ≤ 200 ký tự.\n- Có CTA rõ ràng.\n- Nêu lợi ích nổi bật, tóm tắt nội dung chính.\n- Văn phong lôi cuốn, thể hiện chuyên môn, hứa hẹn giá trị giải pháp.\n\n3. Permalink:\n- Chứa từ khóa chính (chính xác).\n- Chỉ dùng chữ thường, số, dấu gạch ngang.\n- Độ dài 55–75 ký tự.\n- Ngắn gọn, mô tả đúng nội dung; bỏ từ thừa; không ký tự đặc biệt; dễ nhớ.\n\nCHECKLIST KIỂM TRA:\n\n- Đúng mục đích tìm kiếm.\n- Phù hợp loại nội dung.\n- Giá trị rõ ràng, CTA hấp dẫn.\n- Chính tả chuẩn, tối ưu mobile.\n- Không dùng placeholder.\n\nHƯỚNG DẪN KỸ THUẬT:\n- Không dùng dấu ngoặc kép trong mô tả.\n- Tránh ký tự đặc biệt.\n- Dùng UTF-8, viết hoa đúng chuẩn.",
+          "text": "=Tạo meta title, meta description, permalink và 3-4 từ khóa phụ (mở rộng từ từ khóa chính) cho bài viết sau:\n- Tiêu đề: {{ $json.title.raw }}\n- Nội dung: {{ $json.content.raw }}\n- Đoạn trích: {{ $json.excerpt.rendered }}\n- Từ khóa chính: {{ $items('Create Outline + Choose Keyword')[0].json.output.focus_keyword }}\n\nYÊU CẦU META TAG:\n\n1. Meta Title:\n- Chứa từ khóa chính chính xác (nguyên văn, đúng thứ tự).\n- Đặt từ khóa gần đầu tiêu đề.\n- Nên dùng con số nếu phù hợp.\n- Độ dài ≤ 70 ký tự.\n- Nêu rõ giá trị chính, có thể thêm tên thương hiệu.\n\n2. Meta Description:\n- Chứa từ khóa chính (khớp 100%).\n- Độ dài ≤ 200 ký tự.\n- Có CTA rõ ràng.\n- Nêu lợi ích nổi bật, tóm tắt nội dung chính.\n- Văn phong lôi cuốn, thể hiện chuyên môn, hứa hẹn giá trị giải pháp.\n\n3. Permalink:\n- Chứa từ khóa chính (chính xác).\n- Chỉ dùng chữ thường, số, dấu gạch ngang.\n- Độ dài 55–75 ký tự.\n- Ngắn gọn, mô tả đúng nội dung; bỏ từ thừa; không ký tự đặc biệt; dễ nhớ.\n\nCHECKLIST KIỂM TRA:\n\n- Đúng mục đích tìm kiếm.\n- Phù hợp loại nội dung.\n- Giá trị rõ ràng, CTA hấp dẫn.\n- Chính tả chuẩn, tối ưu mobile.\n- Không dùng placeholder.\n\nHƯỚNG DẪN KỸ THUẬT:\n- Không dùng dấu ngoặc kép trong mô tả.\n- Tránh ký tự đặc biệt.\n- Dùng UTF-8, viết hoa đúng chuẩn.",
           "hasOutputParser": true,
           "messages": {
             "messageValues": [
@@ -376,19 +376,19 @@
           "bodyParameters": {
             "parameters": [
               {
-                "name": "=rows[{{$('Đăng bài').item.json.id}}][focus_keyword]",
-                "value": "={{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }},{{ $json.output.secondary_keywords }}"
+                "name": "=rows[{{$('Publish Post').item.json.id}}][focus_keyword]",
+                "value": "={{ $items('Create Outline + Choose Keyword')[0].json.output.focus_keyword }},{{ $json.output.secondary_keywords }}"
               },
               {
-                "name": "=rows[{{$('Đăng bài').item.json.id}}][permalink]",
+                "name": "=rows[{{$('Publish Post').item.json.id}}][permalink]",
                 "value": "={{ $json.output.permalink }}"
               },
               {
-                "name": "=rows[{{$('Đăng bài').item.json.id}}][title]",
+                "name": "=rows[{{$('Publish Post').item.json.id}}][title]",
                 "value": "={{ $json.output.meta_title }}"
               },
               {
-                "name": "=rows[{{$('Đăng bài').item.json.id}}][description]",
+                "name": "=rows[{{$('Publish Post').item.json.id}}][description]",
                 "value": "={{ $json.output.meta_description }}"
               }
             ]
@@ -396,7 +396,7 @@
           "options": {}
         },
         "id": "c156c5dc-ba9a-4f2e-b14e-7c135e0d1a4b",
-        "name": "Set thẻ SEO",
+        "name": "Set SEO Tags",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           1744,
@@ -436,7 +436,7 @@
           352
         ],
         "id": "eda57b16-d6c5-4fa8-a210-9fdc3f8522c2",
-        "name": "Tạo ảnh Freepik1",
+        "name": "Create Freepik Image 1",
         "retryOnFail": true
       },
       {
@@ -464,7 +464,7 @@
           -176
         ],
         "id": "97ce0bc3-bb18-4d3f-ad64-e6662fafe48e",
-        "name": "Tạo ảnh Freepik2",
+        "name": "Create Freepik Image 2",
         "retryOnFail": true
       },
       {
@@ -491,7 +491,7 @@
           "options": {}
         },
         "id": "18791b82-d59e-4051-9087-534c157cf456",
-        "name": "Set ảnh bìa",
+        "name": "Set Featured Image",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           1968,
@@ -546,7 +546,7 @@
           "options": {}
         },
         "id": "d085f4bd-77e0-4826-8fa5-bdc59a138448",
-        "name": "Up ảnh ",
+        "name": "Upload Image",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           1168,
@@ -594,7 +594,7 @@
           32
         ],
         "id": "30e31bf8-0b21-458b-ac1e-43d3cf4bef15",
-        "name": "Nếu gen ảnh1"
+        "name": "If Generate Image 1"
       },
       {
         "parameters": {},
@@ -647,7 +647,7 @@
           "options": {}
         },
         "id": "332b5f8e-c45d-45db-b982-fbcfbc5beb96",
-        "name": "Up ảnh 3",
+        "name": "Upload Image 3",
         "type": "n8n-nodes-base.httpRequest",
         "position": [
           144,
@@ -677,7 +677,7 @@
               },
               {
                 "name": "title",
-                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+                "value": "={{ $('Create Outline + Choose Keyword').item.json.output.title }}"
               }
             ]
           },
@@ -690,7 +690,7 @@
           -32
         ],
         "id": "166dbdb2-8098-4c5e-ac66-1f03af149feb",
-        "name": "Update ảnh1",
+        "name": "Update Image 1",
         "retryOnFail": true,
         "credentials": {
           "wordpressApi": {
@@ -714,7 +714,7 @@
               },
               {
                 "name": "title",
-                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+                "value": "={{ $('Create Outline + Choose Keyword').item.json.output.title }}"
               }
             ]
           },
@@ -727,7 +727,7 @@
           160
         ],
         "id": "fd27f732-4a63-4f3d-883c-0baf5fc14abf",
-        "name": "Update ảnh3",
+        "name": "Update Image 3",
         "retryOnFail": true,
         "credentials": {
           "wordpressApi": {
@@ -751,7 +751,7 @@
               },
               {
                 "name": "title",
-                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+                "value": "={{ $('Create Outline + Choose Keyword').item.json.output.title }}"
               }
             ]
           },
@@ -764,7 +764,7 @@
           352
         ],
         "id": "b39e7a30-0283-4274-a605-ec5bcde0a17f",
-        "name": "Update ảnh2",
+        "name": "Update Image 2",
         "retryOnFail": true,
         "credentials": {
           "wordpressApi": {
@@ -788,7 +788,7 @@
               },
               {
                 "name": "title",
-                "value": "={{ $('Tạo dàn ý + chọn keyword').item.json.output.title }}"
+                "value": "={{ $('Create Outline + Choose Keyword').item.json.output.title }}"
               }
             ]
           },
@@ -801,7 +801,7 @@
           -176
         ],
         "id": "de281f5d-39f2-4e65-a581-12989d2801cf",
-        "name": "Update ảnh",
+        "name": "Update Image",
         "credentials": {
           "wordpressApi": {
             "id": "xjnd3BzvqYUel6cH",
@@ -849,7 +849,7 @@
           512
         ],
         "id": "f4b7d0f2-a4de-427d-9615-ba1261314f29",
-        "name": "Đăng bài",
+        "name": "Publish Post",
         "credentials": {
           "wordpressApi": {
             "id": "xjnd3BzvqYUel6cH",
@@ -962,7 +962,7 @@
           864
         ],
         "id": "5d3d0dcb-51ac-4029-9dea-11c9e1722863",
-        "name": "Tạo json schema"
+        "name": "Create JSON Schema"
       },
       {
         "parameters": {},
@@ -991,7 +991,7 @@
       {
         "parameters": {
           "promptType": "define",
-          "text": "=Nhiệm vụ:\nViết nội dung chi tiết cho 1 phần của bài viết SEO.\n\nDữ liệu đầu vào:\nTừ khóa chính của chủ đề: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.focus_keyword }}\nTiêu đề bài viết: {{ $items('Tạo dàn ý + chọn keyword')[0].json.output.title }}\nPhần cần viết: {{ $json.raw }}\nCác tiểu mục (nếu có): {{ $json.subsections || \"Không có\" }}\n\nHướng dẫn viết:\n- Với phần giới thiệu và kết luận hay lời mời hợp tác, chỉ viết 2-3 câu ngắn.\n- Với các phần khác, hãy viết nội dung cực kỳ chi tiết, có chiều sâu, phù hợp với SEO.\n- Mỗi tiểu mục (sub-section) phải dài tối thiểu 200 từ.\n- Duy trì mật độ từ khóa chính từ 5% đến 10% xuyên suốt nội dung.\n- Viết theo đoạn ngắn 2–4 câu, tránh đoạn dài.\n- Dùng định dạng Markdown, đặc biệt là danh sách gạch đầu dòng để trình bày nội dung rõ ràng, dễ đọc.\n- Trong content nên có bảng (table) dưới dạng html (nếu cần thiết cho số liệu).\n- Giữ giọng văn thông tin – chi tiết – thân thiện SEO (tránh lan man hoặc quảng cáo).\n\nYêu cầu đầu ra:\n- Chỉ xuất nội dung thuần văn bản Markdown (riêng phần bảng thì giữ nguyên html).\n- Tiêu đề  và các tiêu đề phụ phải được đánh số (1., 2. với tiêu đề chính và 1.1, 1.2. với các tiêu đề con) như dữ liệu đầu vào.",
+          "text": "=Nhiệm vụ:\nViết nội dung chi tiết cho 1 phần của bài viết SEO.\n\nDữ liệu đầu vào:\nTừ khóa chính của chủ đề: {{ $items('Create Outline + Choose Keyword')[0].json.output.focus_keyword }}\nTiêu đề bài viết: {{ $items('Create Outline + Choose Keyword')[0].json.output.title }}\nPhần cần viết: {{ $json.raw }}\nCác tiểu mục (nếu có): {{ $json.subsections || \"Không có\" }}\n\nHướng dẫn viết:\n- Với phần giới thiệu và kết luận hay lời mời hợp tác, chỉ viết 2-3 câu ngắn.\n- Với các phần khác, hãy viết nội dung cực kỳ chi tiết, có chiều sâu, phù hợp với SEO.\n- Mỗi tiểu mục (sub-section) phải dài tối thiểu 200 từ.\n- Duy trì mật độ từ khóa chính từ 5% đến 10% xuyên suốt nội dung.\n- Viết theo đoạn ngắn 2–4 câu, tránh đoạn dài.\n- Dùng định dạng Markdown, đặc biệt là danh sách gạch đầu dòng để trình bày nội dung rõ ràng, dễ đọc.\n- Trong content nên có bảng (table) dưới dạng html (nếu cần thiết cho số liệu).\n- Giữ giọng văn thông tin – chi tiết – thân thiện SEO (tránh lan man hoặc quảng cáo).\n\nYêu cầu đầu ra:\n- Chỉ xuất nội dung thuần văn bản Markdown (riêng phần bảng thì giữ nguyên html).\n- Tiêu đề  và các tiêu đề phụ phải được đánh số (1., 2. với tiêu đề chính và 1.1, 1.2. với các tiêu đề con) như dữ liệu đầu vào.",
           "hasOutputParser": true,
           "options": {}
         },
@@ -1046,7 +1046,7 @@
           592
         ],
         "id": "76a2b113-7f07-4c00-a43a-48f50323dbeb",
-        "name": "Tạo dàn ý + chọn keyword"
+        "name": "Create Outline + Choose Keyword"
       },
       {
         "parameters": {
@@ -1119,14 +1119,14 @@
         "main": [
           [
             {
-              "node": "Tạo dàn ý + chọn keyword",
+              "node": "Create Outline + Choose Keyword",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Tạo ảnh Freepik": {
+      "Create Freepik Image": {
         "main": [
           [
             {
@@ -1142,11 +1142,11 @@
           ]
         ]
       },
-      "Up ảnh 1": {
+      "Upload Image 1": {
         "main": [
           [
             {
-              "node": "Update ảnh1",
+              "node": "Update Image 1",
               "type": "main",
               "index": 0
             }
@@ -1157,7 +1157,7 @@
         "main": [
           [
             {
-              "node": "Up ảnh 1",
+              "node": "Upload Image 1",
               "type": "main",
               "index": 0
             }
@@ -1168,18 +1168,18 @@
         "main": [
           [
             {
-              "node": "Up ảnh 2",
+              "node": "Upload Image 2",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Up ảnh 2": {
+      "Upload Image 2": {
         "main": [
           [
             {
-              "node": "Update ảnh2",
+              "node": "Update Image 2",
               "type": "main",
               "index": 0
             }
@@ -1195,12 +1195,12 @@
               "index": 0
             },
             {
-              "node": "Tạo prompt để gen ảnh",
+              "node": "Create Image Generation Prompt",
               "type": "ai_languageModel",
               "index": 0
             },
             {
-              "node": "Tạo json schema",
+              "node": "Create JSON Schema",
               "type": "ai_languageModel",
               "index": 0
             },
@@ -1210,28 +1210,28 @@
               "index": 0
             },
             {
-              "node": "Tạo dàn ý + chọn keyword",
+              "node": "Create Outline + Choose Keyword",
               "type": "ai_languageModel",
               "index": 0
             }
           ]
         ]
       },
-      "Tạo prompt để gen ảnh": {
+      "Create Image Generation Prompt": {
         "main": [
           [
             {
-              "node": "Tạo ảnh Freepik",
+              "node": "Create Freepik Image",
               "type": "main",
               "index": 0
             },
             {
-              "node": "Tạo ảnh Freepik1",
+              "node": "Create Freepik Image 1",
               "type": "main",
               "index": 0
             },
             {
-              "node": "Tạo ảnh Freepik2",
+              "node": "Create Freepik Image 2",
               "type": "main",
               "index": 0
             }
@@ -1242,7 +1242,7 @@
         "main": [
           [
             {
-              "node": "Nếu gen ảnh",
+              "node": "If Generate Image",
               "type": "main",
               "index": 0
             }
@@ -1260,18 +1260,18 @@
           ]
         ]
       },
-      "Nếu cần gen ảnh": {
+      "If Generate Image Needed": {
         "main": [
           [
             {
-              "node": "Tạo prompt để gen ảnh",
+              "node": "Create Image Generation Prompt",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Nếu gen ảnh": {
+      "If Generate Image": {
         "main": [
           [
             {
@@ -1293,7 +1293,7 @@
         "main": [
           [
             {
-              "node": "Đăng bài",
+              "node": "Publish Post",
               "type": "main",
               "index": 0
             }
@@ -1315,14 +1315,14 @@
         "main": [
           [
             {
-              "node": "Set thẻ SEO",
+              "node": "Set SEO Tags",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Tạo ảnh Freepik1": {
+      "Create Freepik Image 1": {
         "main": [
           [
             {
@@ -1333,7 +1333,7 @@
           ]
         ]
       },
-      "Tạo ảnh Freepik2": {
+      "Create Freepik Image 2": {
         "main": [
           [
             {
@@ -1348,25 +1348,25 @@
         "main": [
           [
             {
-              "node": "Up ảnh ",
+              "node": "Upload Image",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Up ảnh ": {
+      "Upload Image": {
         "main": [
           [
             {
-              "node": "Update ảnh",
+              "node": "Update Image",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Nếu gen ảnh1": {
+      "If Generate Image 1": {
         "main": [
           [
             {
@@ -1382,7 +1382,7 @@
         "main": [
           [
             {
-              "node": "Set ảnh bìa",
+              "node": "Set Featured Image",
               "type": "main",
               "index": 0
             }
@@ -1393,25 +1393,25 @@
         "main": [
           [
             {
-              "node": "Up ảnh 3",
+              "node": "Upload Image 3",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Up ảnh 3": {
+      "Upload Image 3": {
         "main": [
           [
             {
-              "node": "Update ảnh3",
+              "node": "Update Image 3",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Update ảnh1": {
+      "Update Image 1": {
         "main": [
           [
             {
@@ -1422,7 +1422,7 @@
           ]
         ]
       },
-      "Update ảnh3": {
+      "Update Image 3": {
         "main": [
           [
             {
@@ -1433,7 +1433,7 @@
           ]
         ]
       },
-      "Update ảnh2": {
+      "Update Image 2": {
         "main": [
           [
             {
@@ -1444,7 +1444,7 @@
           ]
         ]
       },
-      "Update ảnh": {
+      "Update Image": {
         "main": [
           [
             {
@@ -1455,7 +1455,7 @@
           ]
         ]
       },
-      "Đăng bài": {
+      "Publish Post": {
         "main": [
           [
             {
@@ -1464,14 +1464,14 @@
               "index": 0
             },
             {
-              "node": "Nếu gen ảnh1",
+              "node": "If Generate Image 1",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Set thẻ SEO": {
+      "Set SEO Tags": {
         "main": [
           [
             {
@@ -1519,14 +1519,14 @@
         "ai_outputParser": [
           [
             {
-              "node": "Tạo json schema",
+              "node": "Create JSON Schema",
               "type": "ai_outputParser",
               "index": 0
             }
           ]
         ]
       },
-      "Tạo json schema": {
+      "Create JSON Schema": {
         "main": [
           [
             {
@@ -1552,7 +1552,7 @@
         "main": [
           [
             {
-              "node": "Đăng bài",
+              "node": "Publish Post",
               "type": "main",
               "index": 0
             }
@@ -1568,7 +1568,7 @@
               "index": 0
             },
             {
-              "node": "Tạo dàn ý + chọn keyword",
+              "node": "Create Outline + Choose Keyword",
               "type": "ai_memory",
               "index": 0
             }
@@ -1597,16 +1597,16 @@
           ]
         ]
       },
-      "Tạo dàn ý + chọn keyword": {
+      "Create Outline + Choose Keyword": {
         "main": [
           [
             {
-              "node": "Tạo json schema",
+              "node": "Create JSON Schema",
               "type": "main",
               "index": 0
             },
             {
-              "node": "Nếu cần gen ảnh",
+              "node": "If Generate Image Needed",
               "type": "main",
               "index": 0
             },
@@ -1622,7 +1622,7 @@
         "ai_outputParser": [
           [
             {
-              "node": "Tạo dàn ý + chọn keyword",
+              "node": "Create Outline + Choose Keyword",
               "type": "ai_outputParser",
               "index": 0
             }
